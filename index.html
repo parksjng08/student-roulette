@@ -149,10 +149,26 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
 .bar > div{height:100%;background:linear-gradient(90deg,var(--pink),var(--blue));border-radius:999px}
 .note-box{margin-top:8px;font-size:.85rem;color:var(--muted);border-left:3px solid var(--lav);padding-left:9px}
 .modal{
-  border:0;border-radius:23px;padding:0;width:min(520px,92vw);box-shadow:0 24px 70px rgba(50,40,80,.22)
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  padding:18px;
+  background:rgba(70,61,90,.25);
+  backdrop-filter:blur(3px);
+  align-items:center;
+  justify-content:center;
 }
-.modal::backdrop{background:rgba(70,61,90,.25);backdrop-filter:blur(3px)}
-.modalbody{padding:20px}.modalbody h3{margin:0 0 12px}
+.modal.open{display:flex}
+.modalbody{
+  width:min(520px,92vw);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:23px;
+  padding:20px;
+  box-shadow:0 24px 70px rgba(50,40,80,.22)
+}.modalbody h3{margin:0 0 12px}
 .modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 .smallnote{padding:10px 12px;background:var(--yellow);border-radius:14px;font-size:.87rem}
 .kawaii{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
@@ -292,6 +308,11 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
             <div class="grid2">
               <div class="inner">
                 <div class="between"><h3>Students</h3><button class="btn pink" id="addStudentBtn">+ Student</button></div>
+                <div class="row" style="margin-top:12px">
+                  <input id="quickStudentInput" placeholder="Quick add student name">
+                  <button class="btn mint" id="quickAddStudentBtn">Add</button>
+                </div>
+                <div class="tiny" style="margin-top:6px">Quick Add uses the default work list. You can tap Edit afterward to customize that student's tasks.</div>
                 <div id="manageStudentList" class="student-list" style="margin-top:12px"></div>
               </div>
               <div class="inner">
@@ -332,7 +353,7 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
   </div>
 </div>
 
-<dialog id="classModal" class="modal">
+<div id="classModal" class="modal" role="dialog" aria-modal="true">
   <div class="modalbody">
     <h3 id="classModalTitle">New Class</h3>
     <label>Class Name</label>
@@ -342,9 +363,9 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
       <button class="key pink" id="saveClassBtn">Save</button>
     </div>
   </div>
-</dialog>
+</div>
 
-<dialog id="studentModal" class="modal">
+<div id="studentModal" class="modal" role="dialog" aria-modal="true">
   <div class="modalbody">
     <h3 id="studentModalTitle">Student</h3>
     <label>Student Name</label>
@@ -359,9 +380,9 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
       <button class="key mint" id="saveStudentBtn">Save</button>
     </div>
   </div>
-</dialog>
+</div>
 
-<dialog id="subjectModal" class="modal">
+<div id="subjectModal" class="modal" role="dialog" aria-modal="true">
   <div class="modalbody">
     <h3>Subject & Book</h3>
     <label>Subject Name</label><input id="subjectNameInput" placeholder="Example: Reading">
@@ -371,9 +392,9 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
       <button class="key blue" id="saveSubjectBtn">Save</button>
     </div>
   </div>
-</dialog>
+</div>
 
-<dialog id="scheduleModal" class="modal">
+<div id="scheduleModal" class="modal" role="dialog" aria-modal="true">
   <div class="modalbody">
     <h3>Class Day & Time</h3>
     <div class="formgrid">
@@ -390,7 +411,7 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
       <button class="key mint" id="saveScheduleBtn">Save</button>
     </div>
   </div>
-</dialog>
+</div>
 
 <script>
 const KEY="makis-classes-v1";
@@ -659,13 +680,20 @@ function switchTab(name){
   document.querySelectorAll(".tabpage").forEach(p=>p.style.display=p.id==="tab-"+name?"block":"none");
   if(name==="recap")renderClassRecap();
 }
+function openModal(id){
+  el(id).classList.add("open");
+}
+function closeModal(id){
+  el(id).classList.remove("open");
+}
+
 function openClass(mode){
-  classModalMode=mode;const c=cls();el("classModalTitle").textContent=mode==="edit"?"Edit Class":"New Class";el("classNameInput").value=mode==="edit"&&c?c.name:"";el("classModal").showModal();
+  classModalMode=mode;const c=cls();el("classModalTitle").textContent=mode==="edit"?"Edit Class":"New Class";el("classNameInput").value=mode==="edit"&&c?c.name:"";openModal("classModal");
 }
 function openStudent(i=null){
   editingStudentIndex=i;const c=cls(),s=i!==null?c.students[i]:null;
   el("studentModalTitle").textContent=s?`Edit ${s.name}`:"Add Student";el("studentNameInput").value=s?.name||"";
-  el("studentTaskFields").innerHTML="";(s?.tasks||["Recording","Worksheet","Workbook","Extra Homework"]).forEach(addTaskField);el("studentModal").showModal();
+  el("studentTaskFields").innerHTML="";(s?.tasks||["Recording","Worksheet","Workbook","Extra Homework"]).forEach(addTaskField);openModal("studentModal");
 }
 function addTaskField(value=""){
   const r=document.createElement("div");r.className="task-row";r.innerHTML=`<input value="${escapeHTML(value)}" placeholder="Work item"><button class="btn danger">×</button>`;
@@ -673,33 +701,51 @@ function addTaskField(value=""){
 }
 document.querySelectorAll("[data-global]").forEach(b=>b.addEventListener("click",()=>switchGlobal(b.dataset.global)));
 document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
-document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>el(b.dataset.close).close()));
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
 el("newClassBtn").addEventListener("click",()=>openClass("new"));el("emptyNewClass").addEventListener("click",()=>openClass("new"));el("editClassBtn").addEventListener("click",()=>openClass("edit"));
 el("saveClassBtn").addEventListener("click",()=>{
   const name=el("classNameInput").value.trim();if(!name)return;
   if(classModalMode==="edit"){cls().name=name}else{const c={id:uid(),name,students:[],subjects:[],schedule:[],excluded:[],attendance:{},work:{},classNotes:{}};state.classes.push(c);state.selectedClassId=c.id}
-  save();el("classModal").close();renderAll();
+  save();closeModal("classModal");renderAll();
 });
 el("deleteClassBtn").addEventListener("click",()=>{const c=cls();if(c&&confirm(`Delete ${c.name}?`)){state.classes=state.classes.filter(x=>x.id!==c.id);state.selectedClassId=state.classes[0]?.id||null;save();renderAll()}});
 el("addStudentBtn").addEventListener("click",()=>openStudent());
+el("quickAddStudentBtn").addEventListener("click",()=>{
+  const c=cls(), name=el("quickStudentInput").value.trim();
+  if(!c||!name)return;
+  c.students.push({name,tasks:["Recording","Worksheet","Workbook","Extra Homework"]});
+  el("quickStudentInput").value="";
+  save();renderAll();
+});
+el("quickStudentInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter") el("quickAddStudentBtn").click();
+});
 el("addTaskFieldBtn").addEventListener("click",()=>addTaskField(""));
 el("saveStudentBtn").addEventListener("click",()=>{
   const c=cls(),name=el("studentNameInput").value.trim();if(!c||!name)return;
   const tasks=[...el("studentTaskFields").querySelectorAll("input")].map(i=>i.value.trim()).filter(Boolean);
   if(editingStudentIndex!==null){const old=c.students[editingStudentIndex].name;c.students[editingStudentIndex]={name,tasks};if(old!==name)c.excluded=c.excluded.map(n=>n===old?name:n)}
   else c.students.push({name,tasks});
-  save();el("studentModal").close();renderAll();
+  save();closeModal("studentModal");renderAll();
 });
-el("addSubjectBtn").addEventListener("click",()=>{el("subjectNameInput").value="";el("bookNameInput").value="";el("subjectModal").showModal()});
-el("saveSubjectBtn").addEventListener("click",()=>{const c=cls(),subject=el("subjectNameInput").value.trim(),book=el("bookNameInput").value.trim();if(c&&subject){c.subjects.push({subject,book});save();el("subjectModal").close();renderAll()}});
-el("addScheduleBtn").addEventListener("click",()=>el("scheduleModal").showModal());
-el("saveScheduleBtn").addEventListener("click",()=>{const c=cls();if(c){c.schedule.push({day:el("scheduleDayInput").value,time:el("scheduleTimeInput").value});save();el("scheduleModal").close();renderAll()}});
+el("addSubjectBtn").addEventListener("click",()=>{el("subjectNameInput").value="";el("bookNameInput").value="";openModal("subjectModal")});
+el("saveSubjectBtn").addEventListener("click",()=>{const c=cls(),subject=el("subjectNameInput").value.trim(),book=el("bookNameInput").value.trim();if(c&&subject){c.subjects.push({subject,book});save();closeModal("subjectModal");renderAll()}});
+el("addScheduleBtn").addEventListener("click",()=>openModal("scheduleModal"));
+el("saveScheduleBtn").addEventListener("click",()=>{const c=cls();if(c){c.schedule.push({day:el("scheduleDayInput").value,time:el("scheduleTimeInput").value});save();closeModal("scheduleModal");renderAll()}});
 el("spinBtn").addEventListener("click",spin);wheel.addEventListener("click",wheelClick);
 el("attendanceDate").addEventListener("change",renderAttendance);
 el("workDate").addEventListener("change",renderWork);
 el("markAllPresent").addEventListener("click",()=>{const c=cls(),d=el("attendanceDate").value||todayISO();c.attendance[d]={};c.students.forEach(s=>c.attendance[d][s.name]=true);if(d===todayISO())c.excluded=[];save();renderAttendance();renderWheel()});
 el("classRecapPeriod").addEventListener("change",renderClassRecap);el("classRecapDate").addEventListener("change",renderClassRecap);
 el("globalRecapPeriod").addEventListener("change",renderGlobalRecap);el("globalRecapDate").addEventListener("change",renderGlobalRecap);
+
+
+["classModal","studentModal","subjectModal","scheduleModal"].forEach(id=>{
+  const modal=el(id);
+  modal.addEventListener("click",e=>{
+    if(e.target===modal) closeModal(id);
+  });
+});
 
 el("attendanceDate").value=todayISO();el("workDate").value=todayISO();el("classRecapDate").value=todayISO();el("globalRecapDate").value=todayISO();
 if(!state.selectedClassId&&state.classes.length)state.selectedClassId=state.classes[0].id;
