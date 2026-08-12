@@ -174,7 +174,7 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
 .kawaii{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
 .kawaii span{position:absolute;opacity:.35;font-size:26px}
 .k1{left:4%;top:8%}.k2{right:5%;top:13%}.k3{left:6%;bottom:10%}.k4{right:9%;bottom:7%}
-@media(max-width:900px){
+.syncbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.syncstatus{font-size:.82rem;color:var(--muted);font-weight:800}.login-screen{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:18px;background:linear-gradient(145deg,#fff8f5,#f7f3ff 48%,#effaff)}.login-screen.show{display:flex}.login-card{width:min(430px,94vw);background:#fffffff2;border-radius:30px;padding:24px;box-shadow:0 24px 70px rgba(70,60,95,.18);border:2px solid #fff}.login-card h1{margin:0 0 6px}.login-card p{color:var(--muted);margin:0 0 18px}.login-card input{margin-bottom:10px}.setup-note{background:var(--yellow);padding:11px 12px;border-radius:14px;font-size:.84rem;margin:10px 0}.dt-pill{display:inline-flex;align-items:center;gap:5px;background:#ffe6ed;color:#b84e69;border-radius:999px;padding:5px 9px;font-size:.78rem;font-weight:900}@media(max-width:900px){
   .layout{grid-template-columns:1fr}.sidebar{position:static}.class-list{display:grid;grid-template-columns:repeat(2,1fr)}
   .grid2{grid-template-columns:1fr}.summarycards{grid-template-columns:repeat(2,1fr)}
   .checkgrid{grid-template-columns:1.2fr repeat(2,.7fr);overflow-x:auto}
@@ -186,8 +186,20 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
   .cell{background:transparent}.cell:first-child{grid-column:1/-1}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<div id="loginScreen" class="login-screen"><div class="login-card">
+<h1>Maki's Classes ♡</h1><p id="loginSubtitle">Sign in to your teacher dashboard.</p>
+<div id="connectionSetup" style="display:none"><div class="setup-note">First-time setup on this device: paste the Project URL and Publishable Key you saved in Notes.</div>
+<label>Supabase Project URL</label><input id="setupUrl" autocomplete="off" placeholder="https://...supabase.co">
+<label>Publishable Key</label><input id="setupKey" autocomplete="off" placeholder="sb_publishable_...">
+<button class="key blue" id="saveConnectionBtn" style="width:100%">Connect Maki's Classes</button></div>
+<div id="loginForm" style="display:none"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Your email">
+<label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password">
+<button class="key pink" id="loginBtn" style="width:100%">Log In ♡</button><div id="loginError" class="tiny" style="margin-top:12px;text-align:center"></div>
+<button class="btn" id="changeConnectionBtn" style="width:100%;margin-top:10px">Connection Settings</button></div>
+</div></div>
 <div class="kawaii" aria-hidden="true">
   <span class="k1">☁︎</span><span class="k2">♡</span><span class="k3">✿</span><span class="k4">☆</span>
 </div>
@@ -198,7 +210,7 @@ canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14)
       <h1>Maki's Classes ♡</h1>
       <p>Class roulette, attendance, work checks, notes & progress recaps.</p>
     </div>
-    <div class="sparkles">✦ ♡ ✿</div>
+    <div><div class="syncbar"><button class="key mint" id="loadLatestBtn">Load Latest</button><button class="key pink" id="saveTodayBtn">♡ Save Today</button><button class="btn" id="logoutBtn">Log Out</button></div><div class="syncstatus" id="syncStatus">Not synced yet</div></div>
   </header>
 
   <nav class="keytabs">
@@ -564,23 +576,31 @@ function renderAttendance(){
     el("attendanceList").appendChild(r);
   });
 }
-function workRecord(c,date,name){c.work[date]||={};c.work[date][name]||={tasks:{},note:""};return c.work[date][name]}
+function workRecord(c,date,name){c.work[date]||={};c.work[date][name]||={tasks:{},note:"",dt:0};return c.work[date][name]}
 function renderWork(){
   const c=cls();if(!c)return;const date=el("workDate").value||todayISO();el("workDate").value=date;
   const wrap=el("workTable");wrap.innerHTML="";
   if(!c.students.length){wrap.innerHTML='<div class="tiny">Add students first.</div>';return}
+  const allTasks=[...new Set(c.students.flatMap(s=>s.tasks||[]))];
+  const controls=document.createElement("div");controls.className="inner";controls.style.marginBottom="12px";
+  controls.innerHTML=`<strong>Quick Check All</strong><div class="tiny">Check everyone who has that task, then uncheck exceptions below.</div><div class="row" style="margin-top:10px;flex-wrap:wrap">${allTasks.map((t,i)=>`<button class="btn mint" data-check-task="${i}">✓ All ${escapeHTML(t)}</button>`).join("")}<button class="btn blue" data-check-everything>✓ Check Everything</button></div>`;
+  wrap.appendChild(controls);
+  controls.querySelectorAll("[data-check-task]").forEach(btn=>btn.addEventListener("click",()=>{const task=allTasks[+btn.dataset.checkTask];c.students.forEach(st=>{if((st.tasks||[]).includes(task))workRecord(c,date,st.name).tasks[task]=true});save();renderWork()}));
+  controls.querySelector("[data-check-everything]").addEventListener("click",()=>{c.students.forEach(st=>(st.tasks||[]).forEach(t=>workRecord(c,date,st.name).tasks[t]=true));save();renderWork()});
   c.students.forEach(s=>{
     const rec=workRecord(c,date,s.name);
     const box=document.createElement("div");box.className="inner";box.style.marginBottom="11px";
     let tasks=s.tasks||[];
     box.innerHTML=`<div class="between"><strong>${escapeHTML(s.name)}</strong><span class="tiny">${tasks.length} checks</span></div>
       <div class="task-list" style="margin-top:9px">${tasks.map((t,i)=>`<label class="student-row" style="margin:0"><span>${escapeHTML(t)}</span><input data-task="${i}" type="checkbox" style="width:auto" ${rec.tasks[t]?"checked":""}></label>`).join("")}</div>
-      <label style="margin-top:10px">Teacher's Note</label>
-      <textarea data-note placeholder="What happened today? Anything to remember?">${escapeHTML(rec.note||"")}</textarea>`;
+      <div class="between" style="margin-top:10px"><label style="margin:0">Teacher's Note</label><div class="row"><span class="dt-pill">DT: ${rec.dt||0}</span><button class="btn danger" data-dt-plus>+ DT</button><button class="btn" data-dt-minus>−</button></div></div>
+      <textarea data-note placeholder="What happened today? DT reason? Anything to remember?">${escapeHTML(rec.note||"")}</textarea>`;
     box.querySelectorAll("input[data-task]").forEach(inp=>inp.addEventListener("change",e=>{
       const t=tasks[+e.target.dataset.task];rec.tasks[t]=e.target.checked;save();
     }));
     box.querySelector("[data-note]").addEventListener("input",e=>{rec.note=e.target.value;save()});
+    box.querySelector("[data-dt-plus]").addEventListener("click",()=>{rec.dt=(rec.dt||0)+1;save();renderWork()});
+    box.querySelector("[data-dt-minus]").addEventListener("click",()=>{rec.dt=Math.max(0,(rec.dt||0)-1);save();renderWork()});
     wrap.appendChild(box);
   });
 }
@@ -613,23 +633,23 @@ function rangeFor(period,dateStr){
 }
 function recapForClass(c,period,ref){
   ensureClass(c);const [a,b]=rangeFor(period,ref);
-  let totalChecks=0,doneChecks=0,present=0,attendanceTotal=0,notes=[];
+  let totalChecks=0,doneChecks=0,present=0,attendanceTotal=0,totalDT=0,notes=[];
   const studentStats={};
-  c.students.forEach(s=>studentStats[s.name]={done:0,total:0,present:0,att:0});
+  c.students.forEach(s=>studentStats[s.name]={done:0,total:0,present:0,att:0,dt:0});
   Object.entries(c.work).forEach(([date,students])=>{
     if(date<a||date>b)return;
     Object.entries(students).forEach(([name,rec])=>{
       const st=studentStats[name];if(!st)return;
       const tasks=c.students.find(s=>s.name===name)?.tasks||[];
       tasks.forEach(t=>{st.total++;totalChecks++;if(rec.tasks?.[t]){st.done++;doneChecks++}});
-      if(rec.note?.trim())notes.push({date,name,note:rec.note.trim()});
+      const dts=Number(rec.dt||0);st.dt+=dts;totalDT+=dts;if(rec.note?.trim())notes.push({date,name,note:rec.note.trim()});
     });
   });
   Object.entries(c.attendance).forEach(([date,students])=>{
     if(date<a||date>b)return;
     Object.entries(students).forEach(([name,val])=>{const st=studentStats[name];if(!st)return;st.att++;attendanceTotal++;if(val){st.present++;present++}});
   });
-  return {a,b,totalChecks,doneChecks,present,attendanceTotal,notes,studentStats};
+  return {a,b,totalChecks,doneChecks,present,attendanceTotal,totalDT,notes,studentStats};
 }
 function renderRecap(target,c,period,ref){
   const r=recapForClass(c,period,ref),pct=r.totalChecks?Math.round(r.doneChecks/r.totalChecks*100):0,att=r.attendanceTotal?Math.round(r.present/r.attendanceTotal*100):0;
@@ -637,11 +657,11 @@ function renderRecap(target,c,period,ref){
     <div class="metric"><span class="tiny">Work Completion</span><strong>${pct}%</strong></div>
     <div class="metric"><span class="tiny">Attendance</span><strong>${att}%</strong></div>
     <div class="metric"><span class="tiny">Checks Done</span><strong>${r.doneChecks}/${r.totalChecks}</strong></div>
-    <div class="metric"><span class="tiny">Notes</span><strong>${r.notes.length}</strong></div>
+    <div class="metric"><span class="tiny">DTs</span><strong>${r.totalDT}</strong></div>
   </div>
   <div class="inner"><div class="between"><h3>Student Progress</h3><span class="tiny">${r.a} → ${r.b}</span></div>
   <div class="progress-list" style="margin-top:12px">${Object.entries(r.studentStats).map(([name,s])=>{
-    const p=s.total?Math.round(s.done/s.total*100):0;return `<div class="progress-row"><div class="between"><strong>${escapeHTML(name)}</strong><span>${p}%</span></div><div class="bar"><div style="width:${p}%"></div></div><div class="tiny" style="margin-top:5px">${s.done}/${s.total} work checks · ${s.present}/${s.att} attendance</div></div>`
+    const p=s.total?Math.round(s.done/s.total*100):0;return `<div class="progress-row"><div class="between"><strong>${escapeHTML(name)}</strong><span>${p}%</span></div><div class="bar"><div style="width:${p}%"></div></div><div class="tiny" style="margin-top:5px">${s.done}/${s.total} work checks · ${s.present}/${s.att} attendance · ${s.dt} DT${s.dt===1?"":"s"}</div></div>`
   }).join("")||'<div class="tiny">No student data yet.</div>'}</div></div>
   <div class="inner" style="margin-top:14px"><h3>Teacher Notes</h3><div style="margin-top:10px">${r.notes.length?r.notes.sort((x,y)=>y.date.localeCompare(x.date)).map(n=>`<div class="progress-row"><div class="between"><strong>${escapeHTML(n.name)}</strong><span class="tiny">${n.date}</span></div><div class="note-box">${escapeHTML(n.note)}</div></div>`).join(""):'<div class="tiny">No notes in this period.</div>'}</div></div>`;
 }
@@ -666,7 +686,7 @@ function renderGlobalRecap(){
   wrap.innerHTML=state.classes.map(c=>{
     const r=recapForClass(c,period,ref),p=r.totalChecks?Math.round(r.doneChecks/r.totalChecks*100):0,a=r.attendanceTotal?Math.round(r.present/r.attendanceTotal*100):0;
     return `<div class="inner" style="margin-bottom:12px"><div class="between"><div><h3>${escapeHTML(c.name)}</h3><div class="tiny">${c.subjects.map(s=>escapeHTML(s.subject)).join(" · ")||"No subjects"}</div></div><button class="btn lav" data-recap-open="${c.id}">Open</button></div>
-      <div class="summarycards" style="grid-template-columns:repeat(3,1fr)"><div class="metric"><span class="tiny">Work</span><strong>${p}%</strong></div><div class="metric"><span class="tiny">Attendance</span><strong>${a}%</strong></div><div class="metric"><span class="tiny">Notes</span><strong>${r.notes.length}</strong></div></div>
+      <div class="summarycards" style="grid-template-columns:repeat(3,1fr)"><div class="metric"><span class="tiny">Work</span><strong>${p}%</strong></div><div class="metric"><span class="tiny">Attendance</span><strong>${a}%</strong></div><div class="metric"><span class="tiny">DTs</span><strong>${r.totalDT}</strong></div></div>
       ${r.notes.slice(-2).map(n=>`<div class="note-box">${n.date} · ${escapeHTML(n.name)} — ${escapeHTML(n.note)}</div>`).join("")}</div>`
   }).join("");
   wrap.querySelectorAll("[data-recap-open]").forEach(b=>b.addEventListener("click",()=>{state.selectedClassId=b.dataset.recapOpen;save();switchGlobal("classes");switchTab("recap");renderAll()}));
@@ -747,9 +767,24 @@ el("globalRecapPeriod").addEventListener("change",renderGlobalRecap);el("globalR
   });
 });
 
+
+let sb=null,currentUser=null;const CFG_URL="makis-supabase-url",CFG_KEY="makis-supabase-key";
+function connectionConfig(){return{url:localStorage.getItem(CFG_URL)||"",key:localStorage.getItem(CFG_KEY)||""}}
+function showLogin(){el("loginScreen").classList.add("show");const c=connectionConfig();el("connectionSetup").style.display=c.url&&c.key?"none":"block";el("loginForm").style.display=c.url&&c.key?"block":"none"}
+function hideLogin(){el("loginScreen").classList.remove("show")}
+function initSupabase(){const c=connectionConfig();if(!c.url||!c.key||!window.supabase)return false;try{sb=window.supabase.createClient(c.url,c.key);return true}catch(e){return false}}
+async function checkSession(){showLogin();if(!initSupabase())return;const{data}=await sb.auth.getSession();currentUser=data?.session?.user||null;if(currentUser){hideLogin();el("syncStatus").textContent="Signed in · press Load Latest"}}
+async function login(){el("loginError").textContent="Signing in…";if(!sb&&!initSupabase()){el("loginError").textContent="Connection settings are missing.";return}const{data,error}=await sb.auth.signInWithPassword({email:el("loginEmail").value.trim(),password:el("loginPassword").value});if(error){el("loginError").textContent=error.message;return}currentUser=data.user;el("loginPassword").value="";el("loginError").textContent="";hideLogin();el("syncStatus").textContent="Signed in · press Load Latest"}
+async function saveCloud(){if(!currentUser){showLogin();return}el("syncStatus").textContent="Saving…";const payload=JSON.parse(JSON.stringify(state));const{data:rows,error:qerr}=await sb.from("makis_data").select("id").eq("user_id",currentUser.id).limit(1);if(qerr){el("syncStatus").textContent="Save failed: "+qerr.message;return}let error;if(rows&&rows.length){({error}=await sb.from("makis_data").update({data:payload,updated_at:new Date().toISOString()}).eq("id",rows[0].id))}else{({error}=await sb.from("makis_data").insert({user_id:currentUser.id,data:payload,updated_at:new Date().toISOString()}))}if(error){el("syncStatus").textContent="Save failed: "+error.message;return}el("syncStatus").textContent="✓ Saved "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
+async function loadCloud(){if(!currentUser){showLogin();return}el("syncStatus").textContent="Loading…";const{data,error}=await sb.from("makis_data").select("data,updated_at").eq("user_id",currentUser.id).order("updated_at",{ascending:false}).limit(1);if(error){el("syncStatus").textContent="Load failed: "+error.message;return}if(!data||!data.length){el("syncStatus").textContent="No cloud save yet — Save Today will create it.";return}state=data[0].data||blankState();if(!state.selectedClassId&&state.classes?.length)state.selectedClassId=state.classes[0].id;save();renderAll();el("syncStatus").textContent="✓ Loaded "+new Date(data[0].updated_at).toLocaleString()}
+el("saveConnectionBtn").addEventListener("click",()=>{const url=el("setupUrl").value.trim(),key=el("setupKey").value.trim();if(!url||!key)return;localStorage.setItem(CFG_URL,url);localStorage.setItem(CFG_KEY,key);if(initSupabase()){el("connectionSetup").style.display="none";el("loginForm").style.display="block";el("loginSubtitle").textContent="Connected! Now sign in."}});
+el("changeConnectionBtn").addEventListener("click",()=>{const c=connectionConfig();el("setupUrl").value=c.url;el("setupKey").value=c.key;el("connectionSetup").style.display="block";el("loginForm").style.display="none"});
+el("loginBtn").addEventListener("click",login);el("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});el("saveTodayBtn").addEventListener("click",saveCloud);el("loadLatestBtn").addEventListener("click",loadCloud);el("logoutBtn").addEventListener("click",async()=>{if(sb)await sb.auth.signOut();currentUser=null;showLogin()});
+
 el("attendanceDate").value=todayISO();el("workDate").value=todayISO();el("classRecapDate").value=todayISO();el("globalRecapDate").value=todayISO();
 if(!state.selectedClassId&&state.classes.length)state.selectedClassId=state.classes[0].id;
 renderAll();
+checkSession();
 </script>
 </body>
 </html>
