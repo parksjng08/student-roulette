@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Classroom Cutie Roulette</title>
+<style>
+  :root{
+    --pink:#f7b6d2;
+    --pink-light:#fdeaf2;
+    --blue:#b8ddf7;
+    --blue-light:#edf8ff;
+    --purple:#cfc2f3;
+    --cream:#fffdf9;
+    --ink:#4c4660;
+    --muted:#817991;
+    --white:#fff;
+    --danger:#ff6f91;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255,143,190,.23), transparent 28%),
+      radial-gradient(circle at 85% 20%, rgba(134,200,255,.28), transparent 30%),
+      linear-gradient(135deg,#fff8f5,#f8f4ff 45%,#f2fbff);
+  }
+  button,input{font:inherit}
+  button{cursor:pointer}
+  .app{
+    width:min(1180px,95%);
+    margin:0 auto;
+    padding:28px 0 50px;
+  }
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:22px;
+  }
+  .brand h1{
+    margin:0;
+    font-size:clamp(1.7rem,4vw,2.6rem);
+    letter-spacing:-.03em;
+  }
+  .brand p{margin:5px 0 0;color:var(--muted)}
+  .pill{
+    border:0;
+    border-radius:999px;
+    padding:11px 17px;
+    font-weight:800;
+    color:#fff;
+    background:linear-gradient(90deg,var(--pink),var(--blue));
+    box-shadow:0 8px 22px rgba(112,126,180,.18);
+  }
+  .layout{
+    display:grid;
+    grid-template-columns:300px minmax(0,1fr);
+    gap:22px;
+    align-items:start;
+  }
+  .card{
+    background:rgba(255,255,255,.88);
+    border:2px solid rgba(255,255,255,.85);
+    box-shadow:0 14px 36px rgba(87,83,125,.10);
+    border-radius:28px;
+    backdrop-filter: blur(8px);
+  }
+  .sidebar{padding:18px;position:sticky;top:18px}
+  .section-title{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin-bottom:12px;
+  }
+  .section-title h2{font-size:1rem;margin:0}
+  .tiny{font-size:.83rem;color:var(--muted)}
+  .class-list{display:flex;flex-direction:column;gap:9px}
+  .class-btn{
+    width:100%;
+    border:0;
+    border-radius:16px;
+    padding:12px 13px;
+    background:#f8f6fb;
+    color:var(--ink);
+    text-align:left;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    font-weight:750;
+  }
+  .class-btn.active{
+    background:linear-gradient(90deg,var(--pink-light),var(--blue-light));
+    outline:2px solid rgba(184,162,255,.28);
+  }
+  .count{
+    min-width:28px;height:28px;border-radius:999px;display:grid;place-items:center;
+    background:#fff;color:var(--muted);font-size:.78rem
+  }
+  .main{padding:22px}
+  .empty{
+    min-height:520px;display:grid;place-items:center;text-align:center;padding:30px;
+  }
+  .empty h2{margin-bottom:6px}
+  .workspace{display:none}
+  .workspace.show{display:block}
+  .workspace-head{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    margin-bottom:15px;
+  }
+  .workspace-head h2{margin:0;font-size:1.5rem}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{
+    border:0;border-radius:14px;padding:10px 14px;font-weight:800;color:var(--ink);background:#f1eff6;
+  }
+  .btn.pink{background:var(--pink-light)}
+  .btn.blue{background:var(--blue-light)}
+  .btn.danger{background:#ffe4eb;color:#b74b67}
+  .content-grid{
+    display:grid;
+    grid-template-columns:minmax(320px,1.05fr) minmax(260px,.95fr);
+    gap:20px;
+  }
+  .wheel-area{
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:10px 0 2px;
+  }
+  .wheel-wrap{
+    position:relative;
+    width:min(100%,460px);
+    aspect-ratio:1;
+    display:grid;
+    place-items:center;
+  }
+  .pointer{
+    position:absolute;
+    z-index:5;
+    right:-4px;
+    top:50%;
+    transform:translateY(-50%);
+    width:0;height:0;
+    border-top:18px solid transparent;
+    border-bottom:18px solid transparent;
+    border-right:0;
+    border-left:34px solid #fb6f9b;
+    filter:drop-shadow(0 3px 2px rgba(0,0,0,.12));
+  }
+  canvas{
+    width:100%;height:100%;
+    filter:drop-shadow(0 10px 18px rgba(75,74,110,.15));
+  }
+  .spin{
+    margin-top:14px;
+    width:min(330px,100%);
+    border:0;border-radius:999px;
+    padding:16px 22px;
+    font-size:1.08rem;
+    font-weight:900;
+    color:#fff;
+    background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));
+    box-shadow:0 10px 25px rgba(152,129,205,.25);
+  }
+  .spin:disabled{opacity:.55;cursor:not-allowed}
+  .result{
+    min-height:56px;
+    margin-top:12px;
+    text-align:center;
+    font-weight:900;
+    font-size:1.2rem;
+  }
+  .result.pop{animation:pop .45s ease}
+  @keyframes pop{50%{transform:scale(1.12)}}
+  .students-panel{
+    background:linear-gradient(180deg,rgba(255,227,240,.52),rgba(227,244,255,.52));
+    border-radius:22px;
+    padding:16px;
+  }
+  .student-form{display:flex;gap:8px;margin-bottom:13px}
+  .student-form input,.modal input{
+    width:100%;border:2px solid #ece8f2;border-radius:14px;padding:11px 12px;outline:none;background:#fff;color:var(--ink)
+  }
+  input:focus{border-color:var(--purple)}
+  .student-form button{
+    border:0;border-radius:14px;padding:10px 14px;font-weight:900;background:var(--blue);color:#fff
+  }
+  .student-list{
+    display:flex;flex-direction:column;gap:8px;
+    max-height:420px;overflow:auto;padding-right:3px
+  }
+  .student{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    background:#fff;border-radius:14px;padding:10px 11px;
+  }
+  .student-name{font-weight:750;overflow-wrap:anywhere}
+  .student button{
+    border:0;border-radius:10px;padding:6px 9px;background:#ffe6ee;color:#b74b67;font-weight:900
+  }
+  .hint{font-size:.83rem;color:var(--muted);margin:9px 0 0}
+  dialog{
+    border:0;border-radius:24px;padding:0;width:min(420px,92vw);
+    box-shadow:0 25px 70px rgba(45,38,80,.22);
+  }
+  dialog::backdrop{background:rgba(68,58,92,.24);backdrop-filter:blur(3px)}
+  .modal{padding:22px}
+  .modal h3{margin:0 0 6px}
+  .modal p{margin:0 0 14px;color:var(--muted)}
+  .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+    opacity:0;pointer-events:none;
+    background:#4c4660;color:white;padding:10px 16px;border-radius:999px;font-weight:800;
+    transition:.25s ease;
+    z-index:20;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:780px){
+    .layout{grid-template-columns:1fr}
+    .sidebar{position:static}
+    .content-grid{grid-template-columns:1fr}
+    .class-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+    .main{padding:16px}
+  }
+  @media(max-width:460px){
+    .class-list{grid-template-columns:1fr}
+    .topbar{align-items:flex-start}
+    .brand p{font-size:.88rem}
+  }
+</style>
+</head>
+<body>
+<div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-1">
+  <div style="position:absolute;top:5%;left:5%;font-size:34px;opacity:.55">☁︎</div>
+  <div style="position:absolute;top:12%;right:7%;font-size:28px;opacity:.55">♡</div>
+  <div style="position:absolute;bottom:10%;left:8%;font-size:26px;opacity:.5">✿</div>
+  <div style="position:absolute;bottom:6%;right:10%;font-size:30px;opacity:.5">☆</div>
+</div>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <h1>Classroom Cutie Roulette</h1>
+      <p>Pick a student fairly — with a little kawaii sparkle ♡</p>
+    </div>
+    <button class="pill" id="newClassTop">+ New Class</button>
+  </div>
+
+  <div class="layout">
+    <aside class="card sidebar">
+      <div class="section-title">
+        <h2>My Classes</h2>
+        <span class="tiny" id="classTotal">0 classes</span>
+      </div>
+      <div class="class-list" id="classList"></div>
+    </aside>
+
+    <main class="card main">
+      <div class="empty" id="emptyState">
+        <div>
+          <div style="font-size:3rem">♡</div>
+          <h2>Create your first class</h2>
+          <p class="tiny">Add a class, type in your students, then spin the wheel.</p>
+          <button class="pill" id="newClassEmpty">Create a Class</button>
+        </div>
+      </div>
+
+      <section class="workspace" id="workspace">
+        <div class="workspace-head">
+          <div>
+            <div class="tiny">Currently spinning</div>
+            <h2 id="className"></h2>
+          </div>
+          <div class="actions">
+            <button class="btn blue" id="renameClass">Rename</button>
+            <button class="btn danger" id="deleteClass">Delete Class</button>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="wheel-area">
+            <div class="wheel-wrap">
+              <canvas id="wheel" width="600" height="600" aria-label="Student roulette wheel"></canvas>
+              <div class="pointer" aria-hidden="true"></div>
+            </div>
+            <button class="spin" id="spinBtn">SPIN THE WHEEL ♡</button>
+            <div class="result" id="result" aria-live="polite"></div>
+          </div>
+
+          <div class="students-panel">
+            <div class="section-title">
+              <h2>Students</h2>
+              <span class="tiny" id="studentCount">0 students</span>
+            </div>
+            <div class="student-form">
+              <input id="studentInput" maxlength="40" placeholder="Type a student's name…" />
+              <button id="addStudent">Add</button>
+            </div>
+            <div class="student-list" id="studentList"></div>
+            <p class="hint">Tip: after a student is picked, they stay on the wheel so you can spin again.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<dialog id="classDialog">
+  <div class="modal">
+    <h3 id="dialogTitle">Create a class</h3>
+    <p id="dialogHelp">Give your class a name, like “H1 Debate” or “Monday 4 PM.”</p>
+    <input id="classInput" maxlength="40" placeholder="Class name" />
+    <div class="modal-actions">
+      <button class="btn" id="cancelDialog">Cancel</button>
+      <button class="pill" id="saveClass">Save</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = "classroom-cutie-roulette-v1";
+const defaultState = {
+  classes: [
+    { id: crypto.randomUUID(), name: "Sample Class", students: ["Emma","Noah","Mina","Jay"] }
+  ],
+  selectedClassId: null
+};
+
+let state = loadState();
+if (!state.selectedClassId && state.classes.length) state.selectedClassId = state.classes[0].id;
+
+const classList = document.getElementById("classList");
+const classTotal = document.getElementById("classTotal");
+const emptyState = document.getElementById("emptyState");
+const workspace = document.getElementById("workspace");
+const className = document.getElementById("className");
+const studentList = document.getElementById("studentList");
+const studentCount = document.getElementById("studentCount");
+const studentInput = document.getElementById("studentInput");
+const result = document.getElementById("result");
+const spinBtn = document.getElementById("spinBtn");
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const classDialog = document.getElementById("classDialog");
+const classInput = document.getElementById("classInput");
+const dialogTitle = document.getElementById("dialogTitle");
+const dialogHelp = document.getElementById("dialogHelp");
+const toast = document.getElementById("toast");
+
+let rotation = 0;
+let spinning = false;
+let dialogMode = "new";
+
+function loadState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && Array.isArray(saved.classes)) return saved;
+  }catch(e){}
+  return structuredClone(defaultState);
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function selectedClass(){
+  return state.classes.find(c => c.id === state.selectedClassId) || null;
+}
+function showToast(text){
+  toast.textContent = text;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),1500);
+}
+function render(){
+  classList.innerHTML = "";
+  state.classes.forEach(c=>{
+    const b = document.createElement("button");
+    b.className = "class-btn" + (c.id === state.selectedClassId ? " active" : "");
+    const label = document.createElement("span");
+    label.textContent = c.name;
+    const count = document.createElement("span");
+    count.className = "count";
+    count.textContent = c.students.length;
+    b.append(label,count);
+    b.addEventListener("click",()=>{
+      state.selectedClassId = c.id;
+      result.textContent = "";
+      rotation = 0;
+      saveState();
+      render();
+    });
+    classList.appendChild(b);
+  });
+
+  classTotal.textContent = `${state.classes.length} ${state.classes.length===1?"class":"classes"}`;
+  const c = selectedClass();
+  if(!c){
+    emptyState.style.display = "grid";
+    workspace.classList.remove("show");
+    return;
+  }
+  emptyState.style.display = "none";
+  workspace.classList.add("show");
+  className.textContent = c.name;
+  studentCount.textContent = `${c.students.length} ${c.students.length===1?"student":"students"}`;
+  studentList.innerHTML = "";
+
+  c.students.forEach((name,i)=>{
+    const row = document.createElement("div");
+    row.className = "student";
+    const span = document.createElement("span");
+    span.className = "student-name";
+    span.textContent = name;
+    const del = document.createElement("button");
+    del.textContent = "Remove";
+    del.addEventListener("click",()=>{
+      c.students.splice(i,1);
+      result.textContent="";
+      saveState();
+      render();
+    });
+    row.append(span,del);
+    studentList.appendChild(row);
+  });
+
+  drawWheel();
+  spinBtn.disabled = spinning || c.students.length === 0;
+  spinBtn.textContent = c.students.length ? (spinning ? "SPINNING…" : "SPIN THE WHEEL ♡") : "ADD STUDENTS FIRST";
+}
+function drawWheel(){
+  const c = selectedClass();
+  const students = c ? c.students : [];
+  const size = canvas.width;
+  const center = size/2;
+  ctx.clearRect(0,0,size,size);
+
+  if(students.length===0){
+    ctx.beginPath();
+    ctx.arc(center,center,center-12,0,Math.PI*2);
+    ctx.fillStyle="#f4eef7";
+    ctx.fill();
+    ctx.fillStyle="#817991";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.font="700 28px system-ui";
+    ctx.fillText("Add students ♡",center,center);
+    return;
+  }
+
+  const slice = Math.PI*2/students.length;
+  const colors = ["#f7c8da","#c7e7f6","#ddd1f5","#f9dfc7","#cdebdc","#f5d8ef"];
+
+  ctx.save();
+  ctx.translate(center,center);
+  ctx.rotate(rotation);
+
+  students.forEach((name,i)=>{
+    const start = i*slice;
+    const end = start+slice;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.arc(0,0,center-12,start,end);
+    ctx.closePath();
+    ctx.fillStyle=colors[i%colors.length];
+    ctx.fill();
+    ctx.strokeStyle="rgba(255,255,255,.9)";
+    ctx.lineWidth=5;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.rotate(start+slice/2);
+    ctx.translate(center*0.62,0);
+    ctx.rotate(Math.PI/2);
+    ctx.fillStyle="#4c4660";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    const fontSize = students.length > 16 ? 17 : students.length > 10 ? 20 : 24;
+    ctx.font=`800 ${fontSize}px system-ui`;
+    let label=name;
+    if(label.length>12) label=label.slice(0,11)+"…";
+    ctx.fillText(label,0,0);
+    ctx.restore();
+  });
+  ctx.restore();
+
+  ctx.beginPath();
+  ctx.arc(center,center,48,0,Math.PI*2);
+  ctx.fillStyle="#fff";
+  ctx.fill();
+  ctx.strokeStyle="#eadff2";
+  ctx.lineWidth=7;
+  ctx.stroke();
+  ctx.fillStyle="#ff82b3";
+  ctx.font="900 32px system-ui";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("♡",center,center+1);
+}
+function addStudent(){
+  const c=selectedClass();
+  const name=studentInput.value.trim();
+  if(!c || !name) return;
+  c.students.push(name);
+  studentInput.value="";
+  saveState();
+  render();
+  studentInput.focus();
+}
+function openClassDialog(mode){
+  dialogMode=mode;
+  const c=selectedClass();
+  if(mode==="rename" && c){
+    dialogTitle.textContent="Rename class";
+    dialogHelp.textContent="Choose a new name for this class.";
+    classInput.value=c.name;
+  }else{
+    dialogTitle.textContent="Create a class";
+    dialogHelp.textContent='Give your class a name, like “H1 Debate” or “Monday 4 PM.”';
+    classInput.value="";
+  }
+  classDialog.showModal();
+  setTimeout(()=>classInput.focus(),50);
+}
+function saveClassDialog(){
+  const name=classInput.value.trim();
+  if(!name) return;
+  if(dialogMode==="rename"){
+    const c=selectedClass();
+    if(c) c.name=name;
+  }else{
+    const newClass={id:crypto.randomUUID(),name,students:[]};
+    state.classes.push(newClass);
+    state.selectedClassId=newClass.id;
+  }
+  saveState();
+  classDialog.close();
+  render();
+}
+function deleteCurrentClass(){
+  const c=selectedClass();
+  if(!c) return;
+  if(!confirm(`Delete "${c.name}" and all of its student names?`)) return;
+  const idx=state.classes.findIndex(x=>x.id===c.id);
+  state.classes.splice(idx,1);
+  state.selectedClassId=state.classes[idx]?.id || state.classes[idx-1]?.id || null;
+  result.textContent="";
+  saveState();
+  render();
+  showToast("Class deleted");
+}
+function spin(){
+  const c=selectedClass();
+  if(!c || c.students.length===0 || spinning) return;
+  spinning=true;
+  result.textContent="";
+  render();
+
+  const count=c.students.length;
+  const selectedIndex=Math.floor(Math.random()*count);
+  const slice=Math.PI*2/count;
+
+  // Pointer is at 0 radians (right side). Land chosen slice center at pointer.
+  const targetNorm = -(selectedIndex*slice + slice/2);
+  const currentNorm = ((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+  let delta = targetNorm-currentNorm;
+  while(delta<0) delta += Math.PI*2;
+  const extraTurns = 7 + Math.floor(Math.random()*3);
+  const startRotation=rotation;
+  const targetRotation=rotation + extraTurns*Math.PI*2 + delta;
+  const duration=1800;
+  const start=performance.now();
+
+  function easeOutCubic(t){return 1-Math.pow(1-t,3)}
+  function frame(now){
+    const t=Math.min(1,(now-start)/duration);
+    rotation=startRotation+(targetRotation-startRotation)*easeOutCubic(t);
+    drawWheel();
+    if(t<1){
+      requestAnimationFrame(frame);
+    }else{
+      rotation=targetRotation;
+      spinning=false;
+      result.textContent=`✦ ${c.students[selectedIndex]}! ✦`;
+      result.classList.remove("pop");
+      void result.offsetWidth;
+      result.classList.add("pop");
+      render();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+document.getElementById("newClassTop").addEventListener("click",()=>openClassDialog("new"));
+document.getElementById("newClassEmpty").addEventListener("click",()=>openClassDialog("new"));
+document.getElementById("renameClass").addEventListener("click",()=>openClassDialog("rename"));
+document.getElementById("deleteClass").addEventListener("click",deleteCurrentClass);
+document.getElementById("addStudent").addEventListener("click",addStudent);
+document.getElementById("spinBtn").addEventListener("click",spin);
+document.getElementById("cancelDialog").addEventListener("click",()=>classDialog.close());
+document.getElementById("saveClass").addEventListener("click",saveClassDialog);
+studentInput.addEventListener("keydown",e=>{if(e.key==="Enter")addStudent()});
+classInput.addEventListener("keydown",e=>{if(e.key==="Enter")saveClassDialog()});
+
+render();
+</script>
+</body>
+</html>
