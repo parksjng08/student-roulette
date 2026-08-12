@@ -297,7 +297,7 @@
               <button id="addStudent">Add</button>
             </div>
             <div class="student-list" id="studentList"></div>
-            <p class="hint">Tip: after a student is picked, they stay on the wheel so you can spin again.</p>
+            <p class="hint">Attendance mode: tap a student's name/slice on the wheel to turn it gray and skip them. Tap again to include them. You can also tap their name in this list.</p>
           </div>
         </div>
       </section>
@@ -323,7 +323,7 @@
 const STORAGE_KEY = "classroom-cutie-roulette-v1";
 const defaultState = {
   classes: [
-    { id: crypto.randomUUID(), name: "Sample Class", students: ["Emma","Noah","Mina","Jay"] }
+    { id: crypto.randomUUID(), name: "Sample Class", students: ["Emma","Noah","Mina","Jay"], excluded: [] }
   ],
   selectedClassId: null
 };
@@ -364,7 +364,9 @@ function saveState(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 function selectedClass(){
-  return state.classes.find(c => c.id === state.selectedClassId) || null;
+  const c = state.classes.find(c => c.id === state.selectedClassId) || null;
+  if (c && !Array.isArray(c.excluded)) c.excluded = [];
+  return c;
 }
 function showToast(text){
   toast.textContent = text;
@@ -408,13 +410,24 @@ function render(){
   c.students.forEach((name,i)=>{
     const row = document.createElement("div");
     row.className = "student";
+    const isExcluded = c.excluded.includes(name);
+    if (isExcluded) {
+      row.style.opacity = ".55";
+      row.style.filter = "grayscale(.75)";
+    }
+
     const span = document.createElement("span");
     span.className = "student-name";
-    span.textContent = name;
+    span.textContent = isExcluded ? `${name} · absent` : name;
+    span.style.cursor = "pointer";
+    span.title = "Tap to include/exclude from the roulette";
+    span.addEventListener("click",()=>toggleStudent(name));
+
     const del = document.createElement("button");
     del.textContent = "Remove";
     del.addEventListener("click",()=>{
       c.students.splice(i,1);
+      c.excluded = c.excluded.filter(n => n !== name);
       result.textContent="";
       saveState();
       render();
@@ -423,9 +436,10 @@ function render(){
     studentList.appendChild(row);
   });
 
+  const activeCount = c.students.filter(n => !c.excluded.includes(n)).length;
   drawWheel();
-  spinBtn.disabled = spinning || c.students.length === 0;
-  spinBtn.textContent = c.students.length ? (spinning ? "SPINNING…" : "SPIN THE WHEEL ♡") : "ADD STUDENTS FIRST";
+  spinBtn.disabled = spinning || activeCount === 0;
+  spinBtn.textContent = activeCount ? (spinning ? "SPINNING…" : "SPIN THE WHEEL ♡") : (c.students.length ? "NO STUDENTS INCLUDED" : "ADD STUDENTS FIRST");
 }
 function drawWheel(){
   const c = selectedClass();
@@ -461,7 +475,8 @@ function drawWheel(){
     ctx.moveTo(0,0);
     ctx.arc(0,0,center-12,start,end);
     ctx.closePath();
-    ctx.fillStyle=colors[i%colors.length];
+    const isExcluded = c.excluded.includes(name);
+    ctx.fillStyle = isExcluded ? "#d8d6dc" : colors[i%colors.length];
     ctx.fill();
     ctx.strokeStyle="rgba(255,255,255,.9)";
     ctx.lineWidth=5;
@@ -471,7 +486,7 @@ function drawWheel(){
     ctx.rotate(start+slice/2);
     ctx.translate(center*0.62,0);
     ctx.rotate(Math.PI/2);
-    ctx.fillStyle="#4c4660";
+    ctx.fillStyle = isExcluded ? "#8d8994" : "#4c4660";
     ctx.textAlign="center";
     ctx.textBaseline="middle";
     const fontSize = students.length > 16 ? 17 : students.length > 10 ? 20 : 24;
@@ -496,6 +511,19 @@ function drawWheel(){
   ctx.textBaseline="middle";
   ctx.fillText("♡",center,center+1);
 }
+function toggleStudent(name){
+  const c = selectedClass();
+  if (!c || spinning) return;
+  if (c.excluded.includes(name)) {
+    c.excluded = c.excluded.filter(n => n !== name);
+  } else {
+    c.excluded.push(name);
+  }
+  result.textContent = "";
+  saveState();
+  render();
+}
+
 function addStudent(){
   const c=selectedClass();
   const name=studentInput.value.trim();
@@ -528,7 +556,7 @@ function saveClassDialog(){
     const c=selectedClass();
     if(c) c.name=name;
   }else{
-    const newClass={id:crypto.randomUUID(),name,students:[]};
+    const newClass={id:crypto.randomUUID(),name,students:[],excluded:[]};
     state.classes.push(newClass);
     state.selectedClassId=newClass.id;
   }
@@ -550,21 +578,28 @@ function deleteCurrentClass(){
 }
 function spin(){
   const c=selectedClass();
-  if(!c || c.students.length===0 || spinning) return;
+  if(!c || spinning) return;
+
+  const eligibleIndices = c.students
+    .map((name, index) => c.excluded.includes(name) ? -1 : index)
+    .filter(index => index >= 0);
+
+  if(eligibleIndices.length===0) return;
+
   spinning=true;
   result.textContent="";
   render();
 
   const count=c.students.length;
-  const selectedIndex=Math.floor(Math.random()*count);
+  const selectedIndex=eligibleIndices[Math.floor(Math.random()*eligibleIndices.length)];
+  const selectedName=c.students[selectedIndex];
   const slice=Math.PI*2/count;
 
-  // Pointer is at 0 radians (right side). Land chosen slice center at pointer.
   const targetNorm = -(selectedIndex*slice + slice/2);
   const currentNorm = ((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
   let delta = targetNorm-currentNorm;
   while(delta<0) delta += Math.PI*2;
-  const extraTurns = 7 + Math.floor(Math.random()*3);
+  const extraTurns = 5 + Math.floor(Math.random()*2);
   const startRotation=rotation;
   const targetRotation=rotation + extraTurns*Math.PI*2 + delta;
   const duration=1800;
@@ -580,7 +615,7 @@ function spin(){
     }else{
       rotation=targetRotation;
       spinning=false;
-      result.textContent=`✦ ${c.students[selectedIndex]}! ✦`;
+      result.textContent=`♡ ${selectedName}! ♡`;
       result.classList.remove("pop");
       void result.offsetWidth;
       result.classList.add("pop");
@@ -590,12 +625,35 @@ function spin(){
   requestAnimationFrame(frame);
 }
 
+function wheelTap(event){
+  const c = selectedClass();
+  if(!c || !c.students.length || spinning) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = (event.clientX - rect.left) * scaleX - canvas.width/2;
+  const y = (event.clientY - rect.top) * scaleY - canvas.height/2;
+  const radius = Math.hypot(x,y);
+
+  if(radius < 55 || radius > canvas.width/2) return;
+
+  let angle = Math.atan2(y,x) - rotation;
+  angle = ((angle % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
+  const slice = Math.PI*2/c.students.length;
+  const index = Math.floor(angle/slice);
+  const name = c.students[index];
+
+  if(name) toggleStudent(name);
+}
+
 document.getElementById("newClassTop").addEventListener("click",()=>openClassDialog("new"));
 document.getElementById("newClassEmpty").addEventListener("click",()=>openClassDialog("new"));
 document.getElementById("renameClass").addEventListener("click",()=>openClassDialog("rename"));
 document.getElementById("deleteClass").addEventListener("click",deleteCurrentClass);
 document.getElementById("addStudent").addEventListener("click",addStudent);
 document.getElementById("spinBtn").addEventListener("click",spin);
+canvas.addEventListener("click",wheelTap);
 document.getElementById("cancelDialog").addEventListener("click",()=>classDialog.close());
 document.getElementById("saveClass").addEventListener("click",saveClassDialog);
 studentInput.addEventListener("keydown",e=>{if(e.key==="Enter")addStudent()});
