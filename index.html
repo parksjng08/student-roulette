@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Maki's Classes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -277,6 +277,34 @@ label{font-size:.76rem}.tiny{font-size:.72rem}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style id="phone-layout-cleanup-final">
+/* Layout-only cleanup: no visual theme/function changes. */
+@media(max-width:699px){
+  /* iOS Safari does not auto-zoom focused form fields at 16px+. */
+  input, textarea, select{font-size:16px!important;}
+
+  /* Keep date/action controls contained neatly inside their tab/card. */
+  .datebar{display:grid!important;grid-template-columns:minmax(0,1fr);gap:9px!important;align-items:stretch!important;width:100%;}
+  .datebar>div{width:100%!important;min-width:0!important;max-width:100%!important;}
+  .datebar input,.datebar select{display:block;width:100%!important;max-width:100%!important;box-sizing:border-box;}
+  .datebar>.key,.datebar>.btn{width:100%;max-width:100%;box-sizing:border-box;margin:0!important;}
+
+  /* Recap controls stay inside the card instead of hanging past its edge. */
+  #tab-recap .datebar,#globalRecapView .datebar{grid-template-columns:minmax(0,1fr)!important;}
+  #tab-recap #classRecapDate,#globalRecapDate{width:100%!important;}
+
+  /* Header/action rows wrap cleanly instead of colliding on narrow phones. */
+  .class-head>.row,.between>.row{flex-wrap:wrap;}
+  .class-head{min-width:0;}
+  .class-head>div{min-width:0;}
+  .feature-card,.inner,.panel,.main{min-width:0;}
+
+  /* Horizontal tab rows stay on one line and scroll only sideways. */
+  .subtabs,.keytabs{overflow-x:auto!important;overflow-y:hidden!important;flex-wrap:nowrap!important;touch-action:pan-x!important;}
+  .subtabs .subtab,.keytabs .key{flex:0 0 auto!important;white-space:nowrap;}
+}
+</style>
 </head>
 <body>
 <div id="loginScreen" class="login-screen"><div class="login-card">
@@ -354,7 +382,7 @@ label{font-size:.76rem}.tiny{font-size:.72rem}
 <div id="tab-attendance" class="tabpage">
             <div class="datebar">
               <div><label>Date</label><input type="date" id="attendanceDate"></div>
-              <button class="key blue" id="markAllPresent">Mark All Present</button><button class="key pink" id="saveAttendanceBtn">Save Attendance</button>
+              <button class="key pink" id="saveAttendanceBtn">Save Attendance</button>
             </div>
             <div class="inner">
               <div class="between"><h3>Daily Attendance</h3><span class="tiny">Everyone starts checked · press Save Attendance to record</span></div>
@@ -795,7 +823,6 @@ el("addScheduleBtn").addEventListener("click",()=>openModal("scheduleModal"));
 el("saveScheduleBtn").addEventListener("click",()=>{const c=cls();if(c){c.schedule.push({day:el("scheduleDayInput").value,time:el("scheduleTimeInput").value});save();closeModal("scheduleModal");renderAll()}});
 el("attendanceDate").addEventListener("change",renderAttendance);
 el("workDate").addEventListener("change",renderWork);
-el("markAllPresent").addEventListener("click",()=>{const c=cls();if(!c)return;const d=el("attendanceDate").value||todayISO(),draft=attendanceDraft(c,d);c.students.forEach(st=>{draft[st.name]||={present:true,note:""};draft[st.name].present=true});renderAttendance()});
 el("classRecapPeriod").addEventListener("change",renderClassRecap);el("classRecapDate").addEventListener("change",renderClassRecap);
 el("globalRecapPeriod").addEventListener("change",renderGlobalRecap);el("globalRecapDate").addEventListener("change",renderGlobalRecap);
 
