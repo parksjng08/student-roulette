@@ -1,237 +1,912 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Maki's Classes ♡</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maki's Classes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900;1000&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#182652;--pink:#ffb9d2;--pink2:#ff6fa7;--rose:#fff0f6;--blue:#dbe9ff;--mint:#d9f4e8;--lav:#e8ddff;--cream:#fff0d4;--line:#eadfea;--shadow:0 8px 20px rgba(73,55,91,.08)}
-*{box-sizing:border-box}html{background:#fff7fb}body{margin:0;color:var(--ink);font-family:ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold",Inter,system-ui,sans-serif;background:#fff8fb;font-size:13px}button,input,select,textarea{font:inherit;color:inherit}.app{display:grid;grid-template-columns:182px 1fr;min-height:100vh}.side{padding:18px 12px;border-right:1px solid #f0dbe6;background:linear-gradient(180deg,#fff6fa,#fff0f6);position:sticky;top:0;height:100vh;overflow:hidden}.logo{font-size:20px;font-weight:900;margin:0 5px 8px}.side-mascot{height:74px;margin:0 3px 12px;display:flex;align-items:center;gap:9px}.catface{width:62px;height:52px;background:#fff;border:2px solid #24335f;border-radius:45% 45% 48% 48%;position:relative;box-shadow:0 3px 0 #f3d6e2}.catface:before,.catface:after{content:"";position:absolute;top:-8px;width:18px;height:20px;background:#fff;border:2px solid #24335f;z-index:-1}.catface:before{left:5px;transform:rotate(-25deg)}.catface:after{right:5px;transform:rotate(25deg)}.catface .bow{position:absolute;right:-8px;top:-10px;font-size:27px}.catface .eyes{position:absolute;left:15px;top:23px;font-size:11px;letter-spacing:16px}.catface .nose{position:absolute;left:28px;top:29px;font-size:9px}.scribble{font-family:"Comic Sans MS","Bradley Hand",cursive;font-size:11px;line-height:1.3;color:#675a78;transform:rotate(-2deg)}.nav button{width:100%;border:0;background:transparent;text-align:left;padding:10px 10px;border-radius:10px;margin:1px 0;cursor:pointer;font-weight:700;color:#344064}.nav button.active,.nav button:hover{background:#ffdce9;color:#c84679}.nav .ico{display:inline-block;width:25px;color:#52639b}.sidequote{position:absolute;bottom:18px;left:18px;right:18px;background:#fff7d9;border:1px solid #edd9ae;border-radius:5px;padding:12px 8px;text-align:center;box-shadow:0 5px 12px rgba(70,50,60,.08);transform:rotate(-3deg);font-family:"Comic Sans MS","Bradley Hand",cursive;font-size:11px;line-height:1.4;color:#5f5672}.sidequote:before{content:"🍒  🌸";display:block;font-size:18px;margin-bottom:3px}
-main{padding:0 14px 18px;min-width:0;background:radial-gradient(#f6cedd 1px,transparent 1px) 0 0/18px 18px,#fff9fc}.patchwork{height:62px;margin:0 -14px 10px;display:grid;grid-template-columns:1fr 1fr 1fr 1.45fr 1fr 1fr 1fr;overflow:hidden;border-bottom:1px solid #f0dce6}.patchwork span:nth-child(1){background:repeating-linear-gradient(45deg,#ffe6c7 0 8px,#fff0db 8px 16px)}.patchwork span:nth-child(2){background:#e9e0ff;background-image:radial-gradient(#fff 3px,transparent 4px),radial-gradient(#f4b9d3 3px,transparent 4px);background-size:28px 28px;background-position:0 0,14px 14px}.patchwork span:nth-child(3){background:repeating-linear-gradient(0deg,transparent 0 12px,#fff6fa 12px 14px),repeating-linear-gradient(90deg,#ffcddd 0 12px,#fff0f5 12px 14px)}.patchwork .motivate{display:flex;align-items:center;justify-content:center;background:#fff0f5;font-family:"Comic Sans MS","Bradley Hand",cursive;font-size:17px;letter-spacing:2px}.patchwork span:nth-child(5){background:#ffe4ed;background-image:radial-gradient(#f3a5c0 2px,transparent 3px);background-size:22px 22px}.patchwork span:nth-child(6){background:#dff0ff;background-image:radial-gradient(#fff 3px,transparent 4px),radial-gradient(#f3b5cf 2px,transparent 3px);background-size:25px 25px}.patchwork span:nth-child(7){background:repeating-linear-gradient(0deg,#e5f4ed 0 13px,#fff 13px 15px),repeating-linear-gradient(90deg,transparent 0 13px,#fff 13px 15px)}
-.top{display:flex;justify-content:space-between;gap:14px;align-items:center;background:rgba(255,255,255,.94);border:1px solid #efdfe8;border-radius:13px;padding:12px 16px;margin:0 0 12px;box-shadow:var(--shadow);min-height:72px}.top h1{margin:0;font-size:27px;letter-spacing:-.6px}.sub{color:#766c84;font-size:12px;margin-top:3px;font-family:"Comic Sans MS","Bradley Hand",cursive}.sync{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid #e5dce8;background:#fff;padding:7px 11px;border-radius:11px;cursor:pointer;box-shadow:0 2px 0 #eee4ea;font-weight:700}.btn:active{transform:translateY(1px);box-shadow:none}.btn.pink{background:#ffe0eb}.btn.blue{background:#edf5ff}.btn.mint{background:#e2f5e9}.btn.danger{background:#ffe6e8;color:#a33}.status{font-size:10px;color:#807789;text-align:right;margin-top:4px}.quote-note{background:#fff7d8;border:1px solid #ead8aa;padding:8px 10px;border-radius:3px;width:150px;text-align:center;font-family:"Comic Sans MS","Bradley Hand",cursive;font-size:10px;line-height:1.35;transform:rotate(2deg);box-shadow:0 5px 10px #eadde5}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}.stat{padding:13px 16px;border-radius:12px;border:1px solid #f0e5eb;font-weight:900;min-height:67px;display:flex;align-items:center;gap:13px;font-size:20px}.stat .stat-ico{font-size:29px}.stat small{display:block;font-weight:500;color:#59617a;margin-top:1px;font-size:12px}.stat:nth-child(1){background:linear-gradient(135deg,#fff0f5,#ffe5ee)}.stat:nth-child(2){background:linear-gradient(135deg,#edfff8,#dff6ec)}.stat:nth-child(3){background:linear-gradient(135deg,#f4efff,#e9e1ff)}.stat:nth-child(4){background:linear-gradient(135deg,#fff8e8,#ffedcf)}
-.homegrid{display:grid;grid-template-columns:1.05fr .95fr .88fr;gap:10px;align-items:start}.card{background:rgba(255,255,255,.96);border:1px solid #e9dfe8;border-radius:13px;box-shadow:var(--shadow);padding:12px;min-width:0}.card h2,.card h3{margin:0 0 9px}.card h2{font-size:16px}.card h3{font-size:14px}.today-card,.calendar-card,.upcoming-card{min-height:320px}.decor-quote{margin-top:10px;min-height:83px;border:1px solid #f0dce6;border-radius:12px;background:linear-gradient(90deg,#fff1f6,#fff9fc);display:flex;align-items:center;justify-content:center;gap:18px;font-family:"Comic Sans MS","Bradley Hand",cursive;color:#8d5573;font-size:14px;text-align:center}.decor-quote .kitty{font-size:38px}.completion-strip{margin-top:10px;padding:9px 12px;background:#fff0f5;border-radius:9px;color:#e44e86;font-size:11px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:0;border:1px solid #eee7ee;border-radius:10px;overflow:hidden}.dow,.day{text-align:center;font-size:10px}.dow{font-weight:800;padding:7px 2px;background:#fff}.day{min-height:37px;padding:6px 2px;border-top:1px solid #f1edf1;border-right:1px solid #f1edf1;position:relative}.day.today{background:#ffb9d2;font-weight:900;border-radius:9px}.dot{width:6px;height:6px;border-radius:50%;background:#78a6f0;margin:3px auto 0}.dot.holiday{background:#69bf98}.dot.event{background:#ee7eac}.cal-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:9px;color:#6e6680}.cal-legend span:before{content:"";width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;background:#f08eb5}.cal-legend span:nth-child(2):before{background:#7ea8ef}.cal-legend span:nth-child(3):before{background:#b18ae8}.cal-legend span:nth-child(4):before{background:#72c59c}.cal-legend span:nth-child(5):before{background:#c7a1ef}.upitem{display:grid;grid-template-columns:10px 65px 1fr;gap:6px;padding:7px 0;border-bottom:1px solid #f0eaf0;font-size:10px}.upitem:last-child{border:0}.bullet{width:8px;height:8px;border-radius:50%;background:#f29bbb;margin-top:3px}.classrow{display:grid;grid-template-columns:42px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f0eaf0}.classrow:last-child{border:0}.classbadge{padding:7px;border-radius:9px;background:#ffe8f0;font-weight:900;text-align:center}.checks{font-size:10px;line-height:1.6}.ok{color:#16865c}.todo{color:#b34c70}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf7f1;font-size:10px}.pill.warn{background:#ffe3eb;color:#9b3159}.pill.exam{background:#fff1d8}.pill.off{background:#ffe5e5}.tiny{font-size:10px;color:#7e7689}.row{display:flex;align-items:center;gap:8px}.between{display:flex;justify-content:space-between;align-items:center;gap:10px}.wide{grid-column:span 2}.full{grid-column:1/-1}.week-card{grid-column:1/span 2}.month-card{grid-column:3}.tests-card{grid-column:1/span 2}.holidays-card{grid-column:3;grid-row:3/span 2}.meeting-card{grid-column:1/span 2}.bottom-art{grid-column:3;min-height:160px;background:linear-gradient(135deg,#ffe4ed,#fff6dc,#e7f7ef);display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Comic Sans MS","Bradley Hand",cursive;font-size:16px}.bottom-art .bigcat{font-size:48px}.footer-quote{grid-column:1/-1;padding:10px;text-align:center;border:1px dashed #edc9d9;border-radius:10px;background:#fff7fa;font-family:"Comic Sans MS","Bradley Hand",cursive;color:#875a72}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:10px}th,td{border:1px solid #eee8ee;padding:6px 7px;text-align:left;white-space:nowrap}th{background:#faf9fb;font-size:9px}.field{width:100%;padding:8px 9px;border:1px solid #ded7e3;border-radius:9px;background:#fff}textarea.field{min-height:85px;resize:vertical}.section{display:none}.section.show{display:block}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.classcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}.classcard{padding:15px;border:1px solid var(--line);border-radius:16px;background:#fff}.classcard h3{font-size:19px;margin:0 0 5px}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.label{font-size:11px;font-weight:800;margin:2px 0 5px}.modalback{display:none;position:fixed;inset:0;background:rgba(44,36,57,.28);z-index:30;align-items:center;justify-content:center;padding:20px}.modalback.show{display:flex}.modal{width:min(560px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:20px;box-shadow:0 25px 70px rgba(50,35,60,.2)}.modal h2{margin-top:0}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}.login{display:none;position:fixed;inset:0;z-index:100;background:rgba(255,246,251,.88);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}.login.show{display:flex}.loginbox{width:min(390px,100%);background:#fff;padding:23px;border-radius:22px;box-shadow:0 22px 70px rgba(60,45,70,.16);border:1px solid #efdde7}.loginbox h1{text-align:center}.notice{padding:10px 12px;background:#fff5c9;border-radius:12px;font-size:11px;margin:10px 0}.hello{font-size:30px}.holidaybox{background:#fff8fb;border:1px dashed #efbfd1;border-radius:14px;padding:10px;margin-top:10px}.muted{color:#8b8394}.savebar{position:sticky;bottom:10px;display:flex;justify-content:flex-end;margin-top:12px}.saved{background:#e6f6ec!important}.holiday-list{font-size:10px}.holiday-row{display:grid;grid-template-columns:65px 1fr;gap:7px;padding:6px 2px;border-bottom:1px solid #f0e9ef}.holiday-row:last-child{border:0}
-@media(max-width:1050px){.app{grid-template-columns:150px 1fr}.homegrid{grid-template-columns:1fr 1fr}.week-card,.tests-card,.meeting-card{grid-column:1/-1}.month-card,.holidays-card,.bottom-art{grid-column:auto;grid-row:auto}.quote-note{display:none}.stats{grid-template-columns:1fr 1fr}}
-@media(max-width:760px){.app{grid-template-columns:1fr}.side{position:static;height:auto;padding:10px}.side-mascot,.sidequote{display:none}.logo{margin-bottom:7px}.nav{display:flex;overflow:auto;gap:3px}.nav button{width:auto;white-space:nowrap}.patchwork{height:42px}.top{align-items:flex-start}.top h1{font-size:23px}.homegrid{grid-template-columns:1fr}.week-card,.tests-card,.meeting-card,.month-card,.holidays-card,.bottom-art{grid-column:auto}.today-card,.calendar-card,.upcoming-card{min-height:0}.split{grid-template-columns:1fr}.sync{justify-content:flex-start}.status{text-align:left}}
-@media(max-width:520px){main{padding:0 8px 14px}.patchwork{margin:0 -8px 8px}.stats{grid-template-columns:1fr 1fr}.stat{padding:10px;font-size:17px}.stat .stat-ico{font-size:22px}.top{flex-direction:column}.formgrid{grid-template-columns:1fr}}
+:root{
+  --bg:#fffaf7;
+  --ink:#514b61;
+  --muted:#8c8498;
+  --pink:#f4bfd3;
+  --pink2:#fde8f0;
+  --blue:#bcdff4;
+  --blue2:#eaf7ff;
+  --lav:#d8cdf4;
+  --lav2:#f2edff;
+  --mint:#cde9dc;
+  --mint2:#eef9f3;
+  --peach:#f7d7bd;
+  --peach2:#fff2e7;
+  --yellow:#f6e7b7;
+  --gray:#d8d6dd;
+  --gray2:#f1eff3;
+  --card:#ffffffd9;
+  --danger:#db7189;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 8% 9%, rgba(244,191,211,.3), transparent 24%),
+    radial-gradient(circle at 90% 15%, rgba(188,223,244,.34), transparent 25%),
+    radial-gradient(circle at 80% 85%, rgba(205,233,220,.26), transparent 28%),
+    linear-gradient(145deg,#fff9f5,#faf6ff 45%,#f4fbff);
+}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.shell{width:min(1260px,96%);margin:0 auto;padding:22px 0 50px}
+.header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.brand h1{margin:0;font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.03em}
+.brand p{margin:5px 0 0;color:var(--muted)}
+.sparkles{font-size:1.15rem;letter-spacing:.4rem;color:#a897bf}
+.keytabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.key{
+  border:0;
+  border-radius:17px;
+  padding:12px 18px;
+  font-weight:900;
+  background:linear-gradient(#fff,#f4eff7);
+  box-shadow:
+    0 6px 0 #d8d1df,
+    0 9px 16px rgba(87,74,112,.15),
+    inset 0 2px 0 rgba(255,255,255,.9);
+  transition:.12s ease;
+}
+.key:active,.key.active{
+  transform:translateY(4px);
+  box-shadow:
+    0 2px 0 #d8d1df,
+    0 5px 10px rgba(87,74,112,.12),
+    inset 0 2px 0 rgba(255,255,255,.9);
+}
+.key.pink{background:linear-gradient(#fff,var(--pink2));box-shadow:0 6px 0 #e9bfd0,0 9px 16px rgba(87,74,112,.12),inset 0 2px 0 #fff}
+.key.blue{background:linear-gradient(#fff,var(--blue2));box-shadow:0 6px 0 #bfd9e8,0 9px 16px rgba(87,74,112,.12),inset 0 2px 0 #fff}
+.key.lav{background:linear-gradient(#fff,var(--lav2));box-shadow:0 6px 0 #d1c7e7,0 9px 16px rgba(87,74,112,.12),inset 0 2px 0 #fff}
+.key.mint{background:linear-gradient(#fff,var(--mint2));box-shadow:0 6px 0 #c6dfd3,0 9px 16px rgba(87,74,112,.12),inset 0 2px 0 #fff}
+.key.peach{background:linear-gradient(#fff,var(--peach2));box-shadow:0 6px 0 #e8cdb7,0 9px 16px rgba(87,74,112,.12),inset 0 2px 0 #fff}
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
+.panel{
+  background:var(--card);
+  border:2px solid rgba(255,255,255,.85);
+  border-radius:28px;
+  box-shadow:0 16px 40px rgba(82,72,105,.1);
+  backdrop-filter:blur(10px);
+}
+.sidebar{padding:17px;position:sticky;top:15px}
+.row{display:flex;align-items:center;gap:9px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sidebar h2,.main h2,.main h3{margin:0}
+.tiny{font-size:.83rem;color:var(--muted)}
+.class-list{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.classbtn{
+  width:100%;border:0;border-radius:17px;padding:12px 13px;text-align:left;
+  background:#f8f5fa;font-weight:850;
+  display:flex;align-items:center;justify-content:space-between;gap:8px
+}
+.classbtn.active{background:linear-gradient(90deg,var(--pink2),var(--blue2));outline:2px solid rgba(216,205,244,.55)}
+.badge{font-size:.76rem;background:white;border-radius:999px;padding:5px 8px;color:var(--muted)}
+.main{padding:20px;min-height:650px}
+.empty{min-height:540px;display:grid;place-items:center;text-align:center;padding:30px}
+.view{display:none}.view.show{display:block}
+.class-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
+.subject-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.chip{padding:6px 10px;border-radius:999px;background:var(--lav2);font-size:.84rem}
+.subtabs{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 20px}
+.subtab{padding:9px 13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.inner{
+  background:rgba(255,255,255,.68);
+  border:1px solid rgba(220,214,230,.65);
+  border-radius:22px;padding:16px;
+}
+label{display:block;font-size:.85rem;font-weight:800;margin-bottom:5px}
+input,textarea,select{
+  width:100%;border:2px solid #e9e4ee;border-radius:13px;background:#fff;padding:10px 11px;outline:none;
+}
+textarea{min-height:85px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--lav)}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.formgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.btn{
+  border:0;border-radius:13px;padding:10px 13px;font-weight:900;background:#f1edf4
+}
+.btn.pink{background:var(--pink2)} .btn.blue{background:var(--blue2)} .btn.mint{background:var(--mint2)}
+.btn.danger{background:#ffe7ed;color:#b94f69}
+.student-list,.schedule-list,.subject-list,.task-list{display:flex;flex-direction:column;gap:8px}
+.student-row,.schedule-row,.subject-row,.task-row{
+  background:#fff;border-radius:14px;padding:10px 11px;display:flex;justify-content:space-between;align-items:center;gap:10px
+}
+.student-name{font-weight:850}
+.wheel-wrap{width:min(100%,470px);aspect-ratio:1;position:relative;margin:0 auto;display:grid;place-items:center}
+canvas{width:100%;height:100%;filter:drop-shadow(0 12px 16px rgba(80,70,110,.14))}
+.pointer{
+ position:absolute;right:-2px;top:50%;transform:translateY(-50%);
+ width:0;height:0;border-top:17px solid transparent;border-bottom:17px solid transparent;border-left:32px solid #e98bab;z-index:2
+}
+.result{text-align:center;min-height:52px;font-size:1.35rem;font-weight:950;margin-top:10px}
+.pop{animation:pop .35s ease}@keyframes pop{50%{transform:scale(1.12)}}
+.datebar{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:14px}
+.datebar > div{min-width:180px;flex:1}
+.checkgrid{display:grid;grid-template-columns:1.2fr repeat(4,.75fr) 1.4fr;gap:7px;align-items:center}
+.checkhead{font-size:.78rem;color:var(--muted);font-weight:850;padding:0 6px 5px}
+.checkrow{display:contents}
+.cell{background:#fff;border-radius:11px;padding:8px}
+.cell input[type="checkbox"]{width:auto;transform:scale(1.2)}
+.noteinput{min-height:40px;height:42px;padding:7px 8px}
+.summarycards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.metric{background:#fff;border-radius:17px;padding:13px}
+.metric strong{display:block;font-size:1.4rem;margin-top:3px}
+.progress-list{display:flex;flex-direction:column;gap:9px}
+.progress-row{background:#fff;border-radius:14px;padding:11px}
+.bar{height:10px;background:#eeeaf0;border-radius:999px;overflow:hidden;margin-top:7px}
+.bar > div{height:100%;background:linear-gradient(90deg,var(--pink),var(--blue));border-radius:999px}
+.note-box{margin-top:8px;font-size:.85rem;color:var(--muted);border-left:3px solid var(--lav);padding-left:9px}
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  padding:18px;
+  background:rgba(70,61,90,.25);
+  backdrop-filter:blur(3px);
+  align-items:center;
+  justify-content:center;
+}
+.modal.open{display:flex}
+.modalbody{
+  width:min(520px,92vw);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:23px;
+  padding:20px;
+  box-shadow:0 24px 70px rgba(50,40,80,.22)
+}.modalbody h3{margin:0 0 12px}
+.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.smallnote{padding:10px 12px;background:var(--yellow);border-radius:14px;font-size:.87rem}
+.kawaii{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.kawaii span{position:absolute;opacity:.35;font-size:26px}
+.k1{left:4%;top:8%}.k2{right:5%;top:13%}.k3{left:6%;bottom:10%}.k4{right:9%;bottom:7%}
+.syncbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.syncstatus{font-size:.82rem;color:var(--muted);font-weight:800}.login-screen{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:18px;background:linear-gradient(145deg,#fff8f5,#f7f3ff 48%,#effaff)}.login-screen.show{display:flex}.login-card{width:min(430px,94vw);background:#fffffff2;border-radius:30px;padding:24px;box-shadow:0 24px 70px rgba(70,60,95,.18);border:2px solid #fff}.login-card h1{margin:0 0 6px}.login-card p{color:var(--muted);margin:0 0 18px}.login-card input{margin-bottom:10px}.setup-note{background:var(--yellow);padding:11px 12px;border-radius:14px;font-size:.84rem;margin:10px 0}.dt-pill{display:inline-flex;align-items:center;gap:5px;background:#ffe6ed;color:#b84e69;border-radius:999px;padding:5px 9px;font-size:.78rem;font-weight:900}@media(max-width:900px){
+  .layout{grid-template-columns:1fr}.sidebar{position:static}.class-list{display:grid;grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}.summarycards{grid-template-columns:repeat(2,1fr)}
+  .checkgrid{grid-template-columns:1.2fr repeat(2,.7fr);overflow-x:auto}
+}
+@media(max-width:560px){
+  .class-list{grid-template-columns:1fr}.main{padding:14px}.formgrid,.formgrid3{grid-template-columns:1fr}
+  .summarycards{grid-template-columns:1fr 1fr}.keytabs{gap:7px}.key{padding:11px 13px}
+  .checkgrid{display:block}.checkhead{display:none}.checkrow{display:grid;grid-template-columns:1fr 1fr;margin-bottom:11px;background:#fff;border-radius:16px;padding:9px}
+  .cell{background:transparent}.cell:first-child{grid-column:1/-1}
+}
+
+/* Feature update — preserves the original Maki's Classes visual design */
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.feature-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}.tablewrap{overflow:auto}.simpletable{width:100%;border-collapse:collapse}.simpletable th,.simpletable td{padding:9px;border-bottom:1px solid var(--line);text-align:left;font-size:.9rem}.simpletable th{color:var(--muted);font-size:.78rem}.notice{padding:11px 13px;border-radius:14px;background:#fff4f8;color:#8b6675}.eventrow{display:grid;grid-template-columns:105px 90px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+/* Keep the main navigation row visually fixed: no keycap press/jelly movement. */
+.keytabs .key, .keytabs .key:active, .keytabs .key.active{
+  transform:none !important;
+  transition:background-color .12s ease, box-shadow .12s ease;
+}
+@media(max-width:760px){.feature-grid{grid-template-columns:1fr}.eventrow{grid-template-columns:1fr}.keytabs{overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}.keytabs .key{white-space:nowrap;flex:0 0 auto}}
+
+/* =========================================================
+   PHONE POLISHED THEME — based on the supplied pink dashboard
+   Functionality/DOM structure stays the same.
+   ========================================================= */
+:root{
+  --bg:#fff8fc;--ink:#23345f;--muted:#7f7793;
+  --pink:#ff9bc6;--pink2:#ffe4f1;--blue:#9cccf8;--blue2:#eaf5ff;
+  --lav:#cbb9ff;--lav2:#f0ebff;--mint:#a8e3cf;--mint2:#e7f8f2;
+  --peach:#ffd79b;--peach2:#fff3d8;--yellow:#fff0b9;
+  --gray:#ddd8e8;--gray2:#f6f3fa;--card:rgba(255,255,255,.91);
+  --danger:#ef6f9f;--line:#eadfed;
+}
+html{background:#fff7fb}
+body{
+  font-family:"Nunito","Avenir Next Rounded","SF Pro Rounded",ui-rounded,system-ui,-apple-system,sans-serif;
+  background-color:#fff8fc;
+  background-image:
+    linear-gradient(rgba(255,194,220,.16) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,194,220,.16) 1px,transparent 1px),
+    radial-gradient(circle at 8% 10%,rgba(255,176,208,.24),transparent 25%),
+    radial-gradient(circle at 92% 12%,rgba(189,218,255,.28),transparent 24%),
+    linear-gradient(180deg,#fff9fd,#fff5fa 48%,#fff9fc);
+  background-size:18px 18px,18px 18px,auto,auto,auto;
+  color:var(--ink);
+  overflow-x:hidden;
+}
+body:before{
+  content:"☁︎  ✿  ♡   You can do this! ♡   ☁︎  ✿  ♡";
+  display:block;position:relative;z-index:5;width:100%;text-align:center;
+  padding:8px 10px 9px;color:#9c5a8b;font-weight:900;font-size:.82rem;
+  letter-spacing:.04em;background:linear-gradient(90deg,#ffdbea,#fff4fb,#dff1ff,#fff0f7);
+  border-bottom:2px solid rgba(255,166,202,.35);box-shadow:0 3px 12px rgba(207,126,168,.09);
+}
+.shell{width:min(100%,520px);margin:0 auto;padding:12px 12px 80px;position:relative}
+.shell:before,.shell:after{position:fixed;z-index:0;pointer-events:none;opacity:.65;font-size:30px;filter:drop-shadow(0 3px 4px rgba(194,112,153,.12))}
+.shell:before{content:"🎀  ☁️";top:88px;right:10px}.shell:after{content:"🌷  ♡";bottom:12px;left:8px}
+.header{position:relative;z-index:1;display:block;margin-bottom:13px;padding:13px 14px 14px;border:1px solid rgba(244,188,216,.55);border-radius:20px;background:rgba(255,255,255,.76);box-shadow:0 7px 20px rgba(134,92,129,.08)}
+.brand h1{font-size:1.68rem;line-height:1.05;color:#172c62;font-weight:1000;letter-spacing:-.035em}
+.brand h1:after{content:"  🎀";font-size:1rem}
+.brand p{font-size:.8rem;margin-top:5px;color:#8d6685;font-weight:700}
+.header>div:last-child{margin-top:11px}
+.syncbar{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;align-items:stretch}
+.syncbar .key,.syncbar .btn{min-height:42px;padding:8px 10px;border-radius:13px;font-size:.78rem;white-space:nowrap}
+.syncstatus{margin-top:7px;padding-left:2px;font-size:.72rem;color:#9a7892}
+.keytabs{position:relative;z-index:3;display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;margin:0 -12px 13px;padding:3px 12px 10px;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
+.keytabs::-webkit-scrollbar{display:none}
+.keytabs .key{flex:0 0 auto;white-space:nowrap;min-height:42px;padding:9px 13px;border-radius:13px;font-size:.79rem;color:#2c3f6e;border:1px solid rgba(222,202,230,.6);box-shadow:0 3px 0 rgba(208,177,201,.32),0 5px 12px rgba(87,74,112,.07)!important;background:linear-gradient(#fff,#fff4f9)}
+.keytabs .key.active{outline:2px solid rgba(255,135,184,.28);background:linear-gradient(#fff,#ffddeb)}
+.layout{position:relative;z-index:1;display:block}
+.panel{border:1px solid rgba(231,211,228,.8);border-radius:20px;background:rgba(255,255,255,.91);box-shadow:0 8px 24px rgba(94,68,105,.08);backdrop-filter:blur(7px)}
+.sidebar{position:static;padding:13px;margin-bottom:12px}
+.sidebar h2{font-size:1.12rem;color:#24345f}.sidebar .between:after{content:"♡";color:#f28ab8;font-size:1.2rem}
+.class-list{display:flex;flex-direction:row;gap:7px;overflow-x:auto;margin-top:9px;padding-bottom:2px;scrollbar-width:none}.class-list::-webkit-scrollbar{display:none}
+.classbtn{flex:0 0 auto;width:auto;min-width:105px;padding:9px 11px;border-radius:12px;font-size:.78rem;background:#fff6fa;border:1px solid #f1dce8}.classbtn.active{background:linear-gradient(90deg,#ffe2ee,#eef5ff);outline:1px solid #efc8df}
+.main{min-height:500px;padding:14px;border-radius:20px}
+.empty{min-height:390px;padding:26px 14px}.empty h3{font-size:1.25rem}.empty:before{content:"♡";display:block;font-size:3rem;color:#ef8eb8;margin-bottom:8px}
+.class-head{margin-bottom:10px}.class-head h2{font-size:1.3rem}.subject-chips{gap:5px}.chip{padding:5px 8px;font-size:.72rem;background:#f3edff}
+.subtabs{display:flex;gap:6px;overflow-x:auto;flex-wrap:nowrap;margin:9px -2px 13px;padding:2px 2px 7px;scrollbar-width:none}.subtabs::-webkit-scrollbar{display:none}.subtab{flex:0 0 auto;padding:8px 10px;font-size:.75rem;border-radius:11px}
+.inner{padding:12px;border-radius:15px;border:1px solid #eee2ec;background:rgba(255,255,255,.9)}
+.grid2,.grid3,.formgrid,.formgrid3,.feature-grid{grid-template-columns:1fr;gap:10px}
+.summarycards{grid-template-columns:1fr 1fr;gap:7px}.metric{padding:10px;border:1px solid #f0e1eb;border-radius:13px;background:linear-gradient(145deg,#fff,#fff8fc)}.metric strong{font-size:1.1rem}
+.btn{border-radius:11px;padding:9px 11px;font-size:.78rem}.key{border-radius:13px;padding:9px 12px}
+input,textarea,select{border:1.5px solid #eadfea;border-radius:11px;padding:9px 10px;font-size:.82rem;background:#fff}textarea{min-height:72px}
+label{font-size:.76rem}.tiny{font-size:.72rem}
+.student-row,.schedule-row,.subject-row,.task-row{border:1px solid #f0e5ed;border-radius:12px;padding:9px;font-size:.8rem}
+.datebar{gap:7px;margin-bottom:10px}.datebar>div{min-width:0}
+.feature-card{border:1px solid #eadfea;border-radius:15px;padding:12px;background:#fff}.feature-card h3:before{content:"✿ ";color:#ef8eb8}
+.tablewrap{overflow-x:auto;border:1px solid #eee1eb;border-radius:13px;background:#fff}.simpletable{min-width:560px}.simpletable th,.simpletable td{padding:7px 8px;font-size:.72rem;white-space:nowrap}.simpletable th{background:#fff8fb;color:#536187}
+.eventrow{grid-template-columns:1fr;gap:5px;padding:10px;border-bottom:1px dashed #eaddea}
+.notice,.smallnote{border:1px solid #f3d9e6;background:#fff4f8;border-radius:12px;font-size:.76rem}
+.modal{padding:12px}.modalbody{width:min(94vw,430px);padding:15px;border-radius:19px;border:1px solid #f0dce8}
+.login-screen{background-image:linear-gradient(rgba(255,194,220,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,194,220,.15) 1px,transparent 1px),linear-gradient(145deg,#fff8fb,#f9f2ff 48%,#eff8ff);background-size:18px 18px,18px 18px,auto}.login-card{border-radius:22px;border:1px solid #f1dce8;box-shadow:0 18px 50px rgba(107,73,109,.13)}
+/* Small scrapbook charms inspired by the reference image. */
+.panel,.feature-card,.inner{position:relative}.panel:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:#ff9bc6;right:12px;top:10px;box-shadow:15px 7px 0 #b9a8ff;opacity:.45;pointer-events:none}
+/* Phone-first: no vertical jelly movement; horizontal nav only. */
+.keytabs .key,.keytabs .key:active,.keytabs .key.active{transform:none!important;transition:background .12s ease,box-shadow .12s ease}
+@media(min-width:700px){.shell{width:min(100%,760px)}.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:12px}.sidebar{margin-bottom:0}.class-list{display:flex;flex-direction:column;overflow:visible}.classbtn{width:100%}.grid2,.feature-grid{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr 1fr}.formgrid3{grid-template-columns:1fr 1fr 1fr}}
+
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<div id="loginScreen" class="login show"><div class="loginbox">
-  <h1><span class="hello">🎀🐱</span><br>Maki's Classes ♡</h1>
-  <div id="recoveryBox" style="display:none">
-    <div class="notice">Password recovery opened successfully. Create your new password here.</div>
-    <div class="label">New password</div><input id="newPassword" class="field" type="password" autocomplete="new-password">
-    <div class="label" style="margin-top:10px">Confirm password</div><input id="confirmPassword" class="field" type="password" autocomplete="new-password">
-    <button id="setPasswordBtn" class="btn pink" style="width:100%;margin-top:13px">Save New Password ♡</button>
-    <div id="recoveryError" class="tiny" style="margin-top:10px;text-align:center"></div>
-  </div>
-  <div id="connectionSetup" style="display:none">
-    <div class="notice">First time on this device: paste the Supabase Project URL and Publishable Key you saved.</div>
-    <div class="label">Project URL</div><input id="setupUrl" class="field" placeholder="https://...supabase.co">
-    <div class="label" style="margin-top:10px">Publishable Key</div><input id="setupKey" class="field" placeholder="sb_publishable_...">
-    <button id="saveConnectionBtn" class="btn blue" style="width:100%;margin-top:13px">Connect</button>
-  </div>
-  <div id="loginForm" style="display:none">
-    <div class="label">Email</div><input id="loginEmail" class="field" type="email" autocomplete="username">
-    <div class="label" style="margin-top:10px">Password</div><input id="loginPassword" class="field" type="password" autocomplete="current-password">
-    <button id="loginBtn" class="btn pink" style="width:100%;margin-top:13px">Log In ♡</button>
-    <button id="forgotBtn" class="btn" style="width:100%;margin-top:9px">Forgot Password?</button>
-    <button id="changeConnectionBtn" class="btn" style="width:100%;margin-top:9px">Connection Settings</button>
-    <div id="loginError" class="tiny" style="margin-top:10px;text-align:center"></div>
-  </div>
+<div id="loginScreen" class="login-screen"><div class="login-card">
+<h1>Maki's Classes ♡</h1><p id="loginSubtitle">Sign in to your teacher dashboard.</p>
+<div id="connectionSetup" style="display:none"><div class="setup-note">First-time setup on this device: paste the Project URL and Publishable Key you saved in Notes.</div>
+<label>Supabase Project URL</label><input id="setupUrl" autocomplete="off" placeholder="https://...supabase.co">
+<label>Publishable Key</label><input id="setupKey" autocomplete="off" placeholder="sb_publishable_...">
+<button class="key blue" id="saveConnectionBtn" style="width:100%">Connect Maki's Classes</button></div>
+<div id="loginForm" style="display:none"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Your email">
+<label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password">
+<button class="key pink" id="loginBtn" style="width:100%">Log In ♡</button><button class="btn" id="forgotPasswordBtn" style="width:100%;margin-top:8px">Forgot Password?</button><div id="loginError" class="tiny" style="margin-top:12px;text-align:center"></div>
+<button class="btn" id="changeConnectionBtn" style="width:100%;margin-top:10px">Connection Settings</button></div>
 </div></div>
+<div class="shell">
+  <header class="header">
+    <div class="brand">
+      <h1>Maki's Classes ♡</h1>
+      <p>Attendance, work checks, tests, planning & progress recaps.</p>
+    </div>
+    <div><div class="syncbar"><button class="key mint" id="loadLatestBtn">Load Latest</button><button class="key pink" id="saveTodayBtn">♡ Save Today</button><button class="btn" id="logoutBtn">Log Out</button></div><div class="syncstatus" id="syncStatus">Not synced yet</div></div>
+  </header>
 
-<div class="app">
-<aside class="side">
-  <div class="logo">Maki's Classes ♡</div><div class="side-mascot"><div class="catface"><span class="bow">🎀</span><span class="eyes">• •</span><span class="nose">♡</span></div><div class="scribble">small steps<br>brighter days ♡</div></div>
-  <div class="nav" id="nav">
-    <button class="active" data-view="home"><span class="ico">⌂</span>Home</button>
-    <button data-view="classes"><span class="ico">♧</span>Classes</button>
-    <button data-view="attendance"><span class="ico">☑</span>Attendance</button>
-    <button data-view="work"><span class="ico">▣</span>Work Check</button>
-    <button data-view="tests"><span class="ico">▤</span>Tests</button>
-    <button data-view="recaps"><span class="ico">▥</span>Recaps</button>
-    <button data-view="calendar"><span class="ico">□</span>Calendar</button>
-    <button data-view="meetings"><span class="ico">♧</span>Meeting Log</button>
-    <button data-view="settings"><span class="ico">⚙</span>Settings</button>
+  <nav class="keytabs">
+    <button class="key pink active" data-global="classes">Classes</button>
+    <button class="key blue" data-global="today">Today's Classes</button>
+    <button class="key mint" data-global="tests">Tests</button>
+    <button class="key lav" data-global="globalRecap">All-Class Recap</button>
+    <button class="key peach" data-global="calendar">Calendar</button>
+    <button class="key blue" data-global="meetings">Meeting Log</button>
+    <button class="key mint" data-global="settings">Settings</button>
+  </nav>
+
+  <div class="layout">
+    <aside class="panel sidebar">
+      <div class="between">
+        <div>
+          <h2>Class Folders</h2>
+          <div class="tiny" id="classCount">0 classes</div>
+        </div>
+        <button class="key mint" id="newClassBtn">＋</button>
+      </div>
+      <div class="class-list" id="classList"></div>
+    </aside>
+
+    <main class="panel main">
+      <section id="classesView" class="view show">
+        <div id="emptyState" class="empty">
+          <div>
+            <div style="font-size:3rem">♡</div>
+            <h2>Create your first class</h2>
+            <p class="tiny">Set class days, students, subjects, books, work checks and more.</p>
+            <button class="key pink" id="emptyNewClass">Create Class</button>
+          </div>
+        </div>
+
+        <div id="classWorkspace" style="display:none">
+          <div class="class-head">
+            <div>
+              <div class="tiny">Class Folder</div>
+              <h2 id="selectedClassName"></h2>
+              <div class="subject-chips" id="subjectChips"></div>
+            </div>
+            <div class="row">
+              <button class="btn blue" id="editClassBtn">Class Settings</button>
+              <button class="btn danger" id="deleteClassBtn">Delete</button>
+            </div>
+          </div>
+
+          <div class="subtabs">
+            <button class="key blue subtab active" data-tab="attendance">Attendance</button>
+            <button class="key mint subtab" data-tab="work">Work Check</button>
+            <button class="key lav subtab" data-tab="recap">Recap</button>
+            <button class="key peach subtab" data-tab="students">Students & Tasks</button>
+          </div>
+<div id="tab-attendance" class="tabpage">
+            <div class="datebar">
+              <div><label>Date</label><input type="date" id="attendanceDate"></div>
+              <button class="key blue" id="markAllPresent">Mark All Present</button><button class="key pink" id="saveAttendanceBtn">Save Attendance</button>
+            </div>
+            <div class="inner">
+              <div class="between"><h3>Daily Attendance</h3><span class="tiny">Everyone starts checked · press Save Attendance to record</span></div>
+              <div id="attendanceList" class="student-list" style="margin-top:12px"></div><div class="tiny" id="attendanceSaveStatus" style="margin-top:10px"></div>
+            </div>
+          </div>
+
+          <div id="tab-work" class="tabpage" style="display:none">
+            <div class="datebar">
+              <div><label>Date</label><input type="date" id="workDate"></div><button class="key mint" id="saveWorkBtn">Save Work Check</button>
+            </div>
+            <div class="inner">
+              <div class="between"><h3>Daily Work Check</h3><span class="tiny">Each student can have different tasks</span></div>
+              <div id="workTable" style="margin-top:12px"></div><div class="tiny" id="workSaveStatus" style="margin-top:10px"></div>
+            </div>
+          </div>
+
+          <div id="tab-recap" class="tabpage" style="display:none">
+            <div class="datebar">
+              <div><label>Recap Period</label>
+                <select id="classRecapPeriod">
+                  <option value="week">Weekly</option>
+                  <option value="month">Monthly</option>
+                  <option value="year">Yearly</option>
+                </select>
+              </div>
+              <div><label>Reference Date</label><input type="date" id="classRecapDate"></div>
+            </div>
+            <div id="classRecapContent"></div>
+          </div>
+
+          <div id="tab-students" class="tabpage" style="display:none">
+            <div class="grid2">
+              <div class="inner">
+                <div class="between"><h3>Students</h3><button class="btn pink" id="addStudentBtn">+ Student</button></div>
+                <div class="row" style="margin-top:12px">
+                  <input id="quickStudentInput" placeholder="Quick add student name">
+                  <button class="btn mint" id="quickAddStudentBtn">Add</button>
+                </div>
+                <div class="tiny" style="margin-top:6px">Quick Add uses the default work list. You can tap Edit afterward to customize that student's tasks.</div>
+                <div id="manageStudentList" class="student-list" style="margin-top:12px"></div>
+              </div>
+              <div class="inner">
+                <h3>Subjects & Books</h3>
+                <div id="subjectManager" class="subject-list" style="margin-top:12px"></div>
+                <button class="btn blue" id="addSubjectBtn" style="margin-top:10px">+ Subject</button>
+              </div>
+            </div>
+            <div class="inner" style="margin-top:18px">
+              <h3>Class Schedule</h3>
+              <div id="scheduleManager" class="schedule-list" style="margin-top:12px"></div>
+              <button class="btn mint" id="addScheduleBtn" style="margin-top:10px">+ Class Day / Time</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="todayView" class="view">
+        <div class="between"><div><h2>Today's Classes</h2><div class="tiny" id="todayDateLabel"></div></div></div>
+        <div id="todayClassesList" style="margin-top:16px"></div>
+      </section>
+
+      <section id="globalRecapView" class="view">
+        <div class="between"><div><h2>All-Class Recap</h2><div class="tiny">Quick overview for weekly meetings and progress checks.</div></div></div>
+        <div class="datebar" style="margin-top:14px">
+          <div><label>Recap Period</label>
+            <select id="globalRecapPeriod">
+              <option value="week">Weekly</option>
+              <option value="month">Monthly</option>
+              <option value="year">Yearly</option>
+            </select>
+          </div>
+          <div><label>Reference Date</label><input type="date" id="globalRecapDate"></div>
+        </div>
+        <div id="globalRecapContent"></div>
+      </section>
+
+      <section id="testsView" class="view">
+        <div class="between"><div><h2>Monthly Tests</h2><div class="tiny">Vocabulary · Grammar & Writing · Content Understanding</div></div><div class="row"><select id="testClassSelect"></select><input id="testMonthInput" type="month"></div></div>
+        <div class="inner" style="margin-top:14px"><div class="tablewrap"><table class="simpletable" id="testsTable"></table></div><button class="key pink" id="saveTestsBtn" style="margin-top:12px">Save Test Log</button></div>
+      </section>
+
+      <section id="calendarView" class="view">
+        <div class="between"><div><h2>Calendar</h2><div class="tiny">Korean public holidays are auto-added. Add your own tests, meetings and no-class days.</div></div><button class="key peach" id="addEventBtn">+ Event</button></div>
+        <div class="feature-grid" style="margin-top:14px"><div class="feature-card"><h3 id="calendarMonthTitle"></h3><div id="calendarEvents"></div></div><div class="feature-card"><h3>Korean Holidays</h3><div id="holidayList"></div></div></div>
+      </section>
+
+      <section id="meetingsView" class="view">
+        <div class="between"><div><h2>Meeting Log</h2><div class="tiny">Keep recent staff, parent and curriculum meeting notes together.</div></div><button class="key blue" id="addMeetingBtn">+ Meeting</button></div>
+        <div class="inner" style="margin-top:14px"><div class="tablewrap"><table class="simpletable" id="meetingsTable"></table></div></div>
+      </section>
+
+      <section id="settingsView" class="view">
+        <h2>Settings</h2>
+        <div class="feature-grid" style="margin-top:14px"><div class="feature-card"><h3>Class Month</h3><div class="tiny">One date range applies to all classes. Each class can be Normal Classes, Exam Prep Only, or No Class.</div><label>Month name</label><input id="classMonthName" placeholder="October 2026"><div class="formgrid"><div><label>Start</label><input id="classMonthStart" type="date"></div><div><label>End</label><input id="classMonthEnd" type="date"></div></div><div id="classMonthStatuses" style="margin-top:10px"></div><button class="key pink" id="saveClassMonthBtn" style="margin-top:12px">Save Class Month</button></div><div class="feature-card"><h3>Connection</h3><div class="notice">Your existing Supabase connection and Save Today / Load Latest workflow are unchanged.</div><button class="btn" id="openConnectionBtn" style="margin-top:12px">Connection Settings</button></div></div>
+      </section>
+    </main>
   </div>
-  <div class="sidequote">🎀🐱<br>Small steps, brighter days ♡</div>
-</aside>
-
-<main>
-<div class="patchwork" aria-hidden="true"><span></span><span></span><span></span><span class="motivate">✿ ♡ You can do this! ♡ ✿</span><span></span><span></span><span></span></div>
-<div class="top">
-  <div><h1 id="pageTitle">Good evening, Maki! ♡</h1><div class="sub" id="pageSub">Thank you for your hard work today! 🌸</div></div>
-  <div style="display:flex;gap:10px;align-items:center"><div><div class="sync"><button id="loadLatestBtn" class="btn blue">☁ Load Latest</button><button id="saveTodayBtn" class="btn pink">♡ Save Today</button><button id="logoutBtn" class="btn">Log Out</button></div><div id="syncStatus" class="status">Not synced yet</div></div><div class="quote-note">A more organized today<br>leads to a happier tomorrow. ♡ 🎀</div></div>
 </div>
 
-<section id="view-home" class="section show">
-  <div class="stats" id="stats"></div>
-  <div class="homegrid">
-    <div class="card today-card"><div class="between"><h2>Today's Classes</h2><span class="tiny" id="todayLabel"></span></div><div id="todayClasses"></div><div class="completion-strip" id="completionStrip">♡ Your class checklist for today</div></div>
-    <div class="card calendar-card"><div class="between"><h2 id="miniMonthTitle"></h2><div><button class="btn" id="miniPrev">‹</button> <button class="btn" id="miniNext">›</button></div></div><div class="calendar" id="miniCalendar"></div><div class="cal-legend"><span>Class</span><span>Test</span><span>Meeting</span><span>Holiday</span><span>No Class</span></div></div>
-    <div><div class="card upcoming-card"><div class="between"><h2>Upcoming <span class="tiny">(Next 2 Weeks)</span></h2><button class="btn pink" data-open-event>＋ Add</button></div><div id="upcoming"></div></div><div class="decor-quote"><span class="kitty">🎀🐱</span><span>Little by little,<br>progress adds up. ♡ 🌷</span></div></div>
-    <div class="card week-card"><div class="between"><h2>🌸 This Week at a Glance</h2><button class="btn" data-go="recaps">View Details →</button></div><div class="tablewrap"><table id="weekTable"></table></div></div>
-    <div class="card month-card"><div class="between"><h2>🌸 Class Month Settings</h2><button class="btn" data-go="settings">Edit →</button></div><div id="monthSummary"></div></div>
-    <div class="card tests-card"><div class="between"><h2>🗓 Monthly Test Log</h2><button class="btn" data-go="tests">Edit Categories</button></div><div class="tablewrap"><table id="homeTests"></table></div><div class="completion-strip">✎ Grammar & Writing is combined.</div></div>
-    <div class="card holidays-card"><div class="between"><h2>🇰🇷 Korean Holidays <span class="tiny">(Auto-Added)</span></h2><span class="pill">2026⌄</span></div><div id="homeHolidays" class="holiday-list"></div><div class="tiny" style="margin-top:8px">☑ Show holidays on calendar</div></div>
-    <div class="card meeting-card"><div class="between"><h2>🗓 Meeting Log <span class="tiny">(Recent)</span></h2><div><button class="btn" data-go="meetings">View All →</button> <button class="btn blue" id="homeAddMeeting">＋ Add Meeting</button></div></div><div id="homeMeetings"></div></div>
-    <div class="card bottom-art"><div><div class="bigcat">🎀🐱💗</div>Same Progress,<br>Brighter Days ♡</div></div>
-    <div class="footer-quote">🍒 🌸 🌼　A well-organized today leads to a calmer tomorrow. ♡　🌷 🎀</div>
+<div id="classModal" class="modal" role="dialog" aria-modal="true">
+  <div class="modalbody">
+    <h3 id="classModalTitle">New Class</h3>
+    <label>Class Name</label>
+    <input id="classNameInput" placeholder="Example: H1 Debate">
+    <div class="modalactions">
+      <button class="btn" data-close="classModal">Cancel</button>
+      <button class="key pink" id="saveClassBtn">Save</button>
+    </div>
   </div>
-</section>
-
-<section id="view-classes" class="section"><div class="between"><div><h2>Classes</h2><div class="tiny">Students, schedule, subjects/books and monthly status.</div></div><button class="btn pink" id="addClassBtn">＋ Add Class</button></div><div class="classcards" id="classCards" style="margin-top:14px"></div></section>
-
-<section id="view-attendance" class="section"><div class="card"><div class="between"><h2>Attendance</h2><div class="toolbar"><input id="attendanceDate" class="field" type="date" style="width:auto"><select id="attendanceClass" class="field" style="width:auto"></select></div></div><div class="notice">Everyone starts checked as present. Nothing is recorded until you press <b>Save Attendance</b>.</div><div class="tablewrap"><table id="attendanceTable"></table></div><div class="savebar"><button id="saveAttendanceBtn" class="btn pink">Save Attendance</button></div></div></section>
-
-<section id="view-work" class="section"><div class="card"><div class="between"><h2>Work Check</h2><div class="toolbar"><input id="workDate" class="field" type="date" style="width:auto"><select id="workClass" class="field" style="width:auto"></select></div></div><div id="workArea"></div><div class="savebar"><button id="saveWorkBtn" class="btn mint">Save Work Check</button></div></div></section>
-
-<section id="view-tests" class="section"><div class="card"><div class="between"><div><h2>Monthly Test Log</h2><div class="tiny">Vocabulary · Grammar & Writing · Content Understanding</div></div><div class="toolbar"><select id="testClass" class="field" style="width:auto"></select><select id="testMonth" class="field" style="width:auto"></select></div></div><div class="tablewrap"><table id="testTable"></table></div><div class="savebar"><button id="saveTestsBtn" class="btn pink">Save Test Log</button></div></div></section>
-
-<section id="view-recaps" class="section"><div class="card"><div class="between"><h2>All-Class Recap</h2><div class="toolbar"><select id="recapMode" class="field" style="width:auto"><option value="week">Weekly Recap</option><option value="month">Monthly Recap</option></select><input id="recapDate" class="field" type="date" style="width:auto"></div></div><div class="tiny" id="recapRange" style="margin-bottom:10px"></div><div class="tablewrap"><table id="recapTable"></table></div></div></section>
-
-<section id="view-calendar" class="section"><div class="split"><div class="card"><div class="between"><h2 id="bigMonthTitle"></h2><div><button class="btn" id="calPrev">‹</button> <button class="btn" id="calNext">›</button> <button class="btn pink" data-open-event>＋ Add Event</button></div></div><div class="calendar" id="bigCalendar"></div></div><div class="card"><h2>Events & Korean Holidays</h2><div class="holidaybox">🇰🇷 Korean public holidays are auto-added to the calendar. You can still add your own academy events and no-class days.</div><div id="calendarList" style="margin-top:10px"></div></div></div></section>
-
-<section id="view-meetings" class="section"><div class="card"><div class="between"><h2>Meeting Log</h2><button id="addMeetingBtn" class="btn pink">＋ Add Meeting</button></div><div class="tablewrap"><table id="meetingTable"></table></div></div></section>
-
-<section id="view-settings" class="section">
-<div class="grid">
-  <div class="card wide"><h2>Class Month Settings</h2><div class="notice">One class-month period applies to all classes. Individual classes can still be marked <b>Exam Prep</b> or <b>No Class</b>.</div><div class="formgrid"><div><div class="label">Month name</div><input id="monthName" class="field" placeholder="October 2026"></div><div><div class="label">Start date</div><input id="monthStart" class="field" type="date"></div><div><div class="label">End date</div><input id="monthEnd" class="field" type="date"></div></div><button id="saveMonthBtn" class="btn pink" style="margin-top:12px">Save Class Month</button><div id="classStatuses" style="margin-top:14px"></div></div>
-  <div class="card"><h2>Cloud & Account</h2><p class="tiny">Use Save Today before switching devices, then Load Latest on the other device.</p><button id="settingsConnectionBtn" class="btn">Connection Settings</button></div>
 </div>
-</section>
-</main></div>
 
-<div class="modalback" id="classModal"><div class="modal"><h2 id="classModalTitle">Add Class</h2>
-<div class="formgrid"><div><div class="label">Class name</div><input id="classNameInput" class="field" placeholder="S3"></div><div><div class="label">Class time</div><input id="classTimeInput" class="field" placeholder="9:00 AM – 10:00 AM"></div></div>
-<div class="label" style="margin-top:12px">Class days</div><div id="dayChecks" class="toolbar"></div>
-<div class="label">Subjects / books (optional)</div><textarea id="classSubjectsInput" class="field" placeholder="Reading — The Magic Finger&#10;Grammar — Workbook 3"></textarea>
-<div class="label" style="margin-top:10px">Students — one name per line</div><textarea id="classStudentsInput" class="field"></textarea>
-<div class="actions"><button class="btn" data-close="classModal">Cancel</button><button id="saveClassBtn" class="btn pink">Save Class</button></div></div></div>
+<div id="studentModal" class="modal" role="dialog" aria-modal="true">
+  <div class="modalbody">
+    <h3 id="studentModalTitle">Student</h3>
+    <label>Student Name</label>
+    <input id="studentNameInput" placeholder="Student name">
+    <div style="margin-top:14px">
+      <div class="between"><label style="margin:0">Work to Check</label><button class="btn mint" id="addTaskFieldBtn">+ Task</button></div>
+      <div class="tiny" style="margin:4px 0 10px">Customize this per student. Example: Recording, Workbook, Worksheet, Extra Homework.</div>
+      <div id="studentTaskFields" class="task-list"></div>
+    </div>
+    <div class="modalactions">
+      <button class="btn" data-close="studentModal">Cancel</button>
+      <button class="key mint" id="saveStudentBtn">Save</button>
+    </div>
+  </div>
+</div>
 
-<div class="modalback" id="eventModal"><div class="modal"><h2>Add Calendar Event</h2>
-<div class="formgrid"><div><div class="label">Date</div><input id="eventDate" class="field" type="date"></div><div><div class="label">Type</div><select id="eventType" class="field"><option>Event</option><option>Test</option><option>Meeting</option><option>No Class</option><option>Holiday</option></select></div></div>
-<div class="label" style="margin-top:10px">Title</div><input id="eventTitle" class="field" placeholder="S3 monthly test">
-<div class="actions"><button class="btn" data-close="eventModal">Cancel</button><button id="saveEventBtn" class="btn pink">Add</button></div></div></div>
+<div id="subjectModal" class="modal" role="dialog" aria-modal="true">
+  <div class="modalbody">
+    <h3>Subject & Book</h3>
+    <label>Subject Name</label><input id="subjectNameInput" placeholder="Example: Reading">
+    <label style="margin-top:10px">Book Name</label><input id="bookNameInput" placeholder="Example: Spotlight on First Reading 2">
+    <div class="modalactions">
+      <button class="btn" data-close="subjectModal">Cancel</button>
+      <button class="key blue" id="saveSubjectBtn">Save</button>
+    </div>
+  </div>
+</div>
 
-<div class="modalback" id="meetingModal"><div class="modal"><h2>Add Meeting Log</h2>
-<div class="formgrid"><div><div class="label">Date</div><input id="meetingDate" class="field" type="date"></div><div><div class="label">Title</div><input id="meetingTitle" class="field" placeholder="Staff Meeting"></div></div>
-<div class="label" style="margin-top:10px">Notes</div><textarea id="meetingNotes" class="field"></textarea>
-<div class="actions"><button class="btn" data-close="meetingModal">Cancel</button><button id="saveMeetingBtn" class="btn pink">Save</button></div></div></div>
+<div id="scheduleModal" class="modal" role="dialog" aria-modal="true">
+  <div class="modalbody">
+    <h3>Class Day & Time</h3>
+    <div class="formgrid">
+      <div><label>Day</label>
+        <select id="scheduleDayInput">
+          <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+          <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+        </select>
+      </div>
+      <div><label>Time</label><input type="time" id="scheduleTimeInput"></div>
+    </div>
+    <div class="modalactions">
+      <button class="btn" data-close="scheduleModal">Cancel</button>
+      <button class="key mint" id="saveScheduleBtn">Save</button>
+    </div>
+  </div>
+</div>
 
+
+<div id="eventModal" class="modal" role="dialog" aria-modal="true"><div class="modalbody"><h3>Add Calendar Event</h3><label>Date</label><input id="eventDate" type="date"><label style="margin-top:10px">Type</label><select id="eventType"><option>Event</option><option>Test</option><option>Meeting</option><option>No Class</option></select><label style="margin-top:10px">Title</label><input id="eventTitle" placeholder="Example: S3 monthly test"><div class="modalactions"><button class="btn" data-close="eventModal">Cancel</button><button class="key peach" id="saveEventBtn">Save</button></div></div></div>
+<div id="meetingModal" class="modal" role="dialog" aria-modal="true"><div class="modalbody"><h3>Add Meeting</h3><label>Date</label><input id="meetingDate" type="date"><label style="margin-top:10px">Title</label><input id="meetingTitle" placeholder="Staff Meeting"><label style="margin-top:10px">Notes</label><textarea id="meetingNotes" rows="4" placeholder="Meeting notes"></textarea><div class="modalactions"><button class="btn" data-close="meetingModal">Cancel</button><button class="key blue" id="saveMeetingBtn">Save</button></div></div></div>
 <script>
-const KEY="makis-classes-v1", CFG_URL="makis-supabase-url", CFG_KEY="makis-supabase-key";
-const $=id=>document.getElementById(id), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-const iso=d=>{const x=new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`};
-const today=()=>iso(new Date()), uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random();
-const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], FULL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-let sb=null,currentUser=null,editingClassId=null,calendarCursor=new Date(),miniCursor=new Date(),holidayCache={};
-
-function blank(){return{classes:[],selectedClassId:null,events:[],meetings:[],tests:{},classMonths:[]}}
-function load(){try{let s=JSON.parse(localStorage.getItem(KEY))||blank();migrate(s);return s}catch(e){return blank()}}
+const KEY="makis-classes-v1";
+const COLORS=["#f4bfd3","#bcdff4","#d8cdf4","#cde9dc","#f7d7bd","#f6e7b7","#e9c8e4","#c9e4ef"];
 let state=load();
-function migrate(s){
- s.classes=Array.isArray(s.classes)?s.classes:[]; s.events ||= []; s.meetings ||= []; s.tests ||= {}; s.classMonths ||= [];
- s.classes.forEach(c=>{c.id ||= uid(); c.students ||= []; c.schedule ||= []; c.subjects ||= []; c.attendance ||= {}; c.work ||= {}; c.classNotes ||= {}; c.monthStatus ||= {};
-   c.students=c.students.map(x=>typeof x==="string"?{name:x,tasks:["Recording","Worksheet","Workbook","Extra Homework"]}:({...x,tasks:x.tasks||["Recording","Worksheet","Workbook","Extra Homework"]}));
- });
+
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function uid(){return (crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random())}
+function blankState(){return {classes:[],selectedClassId:null,events:[],meetings:[],tests:{},classMonth:{name:"",start:"",end:"",statuses:{}}}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return s&&Array.isArray(s.classes)?s:blankState()}catch(e){return blankState()}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function cls(){return state.classes.find(c=>c.id===state.selectedClassId)||null}
+function ensureState(){state.events ||= []; state.meetings ||= []; state.tests ||= {}; state.classMonth ||= {name:"",start:"",end:"",statuses:{}}; state.classMonth.statuses ||= {}}
+function ensureClass(c){
+  if(!c)return;
+  c.students ||= [];
+  c.subjects ||= [];
+  c.schedule ||= [];
+  c.excluded ||= [];
+  c.attendance ||= {};
+  c.work ||= {};
+  c.classNotes ||= {};
+  c.attendanceNotes ||= {};
+  c.attendanceSaved ||= {};
+  c.workSaved ||= {};
+  c.students.forEach(s=>{s.tasks ||= ["Recording","Worksheet","Workbook","Extra Homework"]});
 }
-function saveLocal(){localStorage.setItem(KEY,JSON.stringify(state))}
-function currentMonth(){return state.classMonths[state.classMonths.length-1]||null}
-function classById(id){return state.classes.find(c=>c.id===id)}
-function scheduleDays(c){return (c.schedule||[]).map(x=>typeof x==="string"?x:(x.day||"")).filter(Boolean)}
-function classScheduled(c,date=today()){let n=FULL[new Date(date+"T12:00:00").getDay()];return scheduleDays(c).some(d=>d===n||d.slice(0,3)===n.slice(0,3))}
-function workSaved(c,d){return !!(c.work&&c.work[d]&&c.work[d]._saved)}
-function attendanceSaved(c,d){return !!(c.attendance&&c.attendance[d]&&c.attendance[d]._saved)}
-function setView(v){document.querySelectorAll(".section").forEach(x=>x.classList.remove("show"));$("view-"+v).classList.add("show");document.querySelectorAll("#nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));const titles={home:"Good evening, Maki! ♡",classes:"Classes",attendance:"Attendance",work:"Work Check",tests:"Monthly Tests",recaps:"All-Class Recap",calendar:"Calendar",meetings:"Meeting Log",settings:"Settings"};$("pageTitle").textContent=titles[v]||"Maki's Classes ♡";renderAll()}
-document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>setView(b.dataset.view));document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>setView(b.dataset.go));
-function openModal(id){$(id).classList.add("show")}function closeModal(id){$(id).classList.remove("show")}document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.querySelectorAll(".modalback").forEach(m=>m.onclick=e=>{if(e.target===m)closeModal(m.id)});
+function dateDayName(dateStr){return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date(dateStr+"T12:00:00").getDay()]}
+function escapeHTML(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 
-function renderAll(){renderSelects();renderHome();renderClasses();renderAttendance();renderWork();renderTests();renderRecap();renderCalendars();renderMeetings();renderSettings()}
-function renderSelects(){["attendanceClass","workClass","testClass"].forEach(id=>{let old=$(id).value;$(id).innerHTML=state.classes.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");if(state.classes.some(c=>c.id===old))$(id).value=old});$("testMonth").innerHTML=(state.classMonths.length?state.classMonths:[{id:"default",name:"Current Month"}]).map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("")}
-function renderHome(){
- let t=today(), scheduled=state.classes.filter(c=>classScheduled(c,t));
- $("todayLabel").textContent=new Date(t+"T12:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"});
- let studentCount=state.classes.reduce((a,c)=>a+c.students.length,0);
- let testEvents=futureEvents().filter(e=>(e.type||"").toLowerCase()==="test").length;
- $("stats").innerHTML=`<div class="stat"><span class="stat-ico">👥</span><div>${state.classes.length}<small>Classes</small></div></div><div class="stat"><span class="stat-ico">♙</span><div>${studentCount}<small>Students</small></div></div><div class="stat"><span class="stat-ico">▤</span><div>${testEvents}<small>Tests This Week</small></div></div><div class="stat"><span class="stat-ico">🗓</span><div>${futureEvents().length}<small>Upcoming Event${futureEvents().length===1?"":"s"}</small></div></div>`;
- $("todayClasses").innerHTML=scheduled.length?scheduled.map((c,i)=>{let a=attendanceSaved(c,t),w=workSaved(c,t),left=(a?0:1)+(w?0:1),time=(c.schedule?.find(x=>(x.day||"").slice(0,3)===FULL[new Date(t+"T12:00:00").getDay()].slice(0,3))?.time)||c.time||"";return`<div class="classrow"><div class="classbadge" style="background:${['#ffe8f0','#fff3d9','#eee8ff','#e6f0ff'][i%4]}">${esc(c.name)}</div><div><b>${esc(time||"Scheduled class")}</b><div class="checks"><span class="${a?'ok':'todo'}">${a?'✓':'○'} Attendance</span>　<span class="${w?'ok':'todo'}">${w?'✓':'○'} Work Check</span></div></div><span class="pill ${left?'warn':''}">${left?left+' left':'Complete'}</span></div>`}).join(""):`<div class="tiny" style="padding:28px 5px;text-align:center">No classes scheduled today ♡</div>`;
- let left=scheduled.reduce((n,c)=>n+(attendanceSaved(c,t)&&workSaved(c,t)?0:1),0);$("completionStrip").textContent=left?`♡ ${left} class${left===1?'':'es'} still need to be completed for today!`:`♡ Everything for today is complete!`;
- renderMini(); let ups=futureEvents().slice(0,7);$("upcoming").innerHTML=ups.length?ups.map(e=>`<div class="upitem"><span class="bullet"></span><b>${fmtShort(e.date)}</b><span>${esc(e.title)}</span></div>`).join(""):`<div class="tiny">Nothing coming up.</div>`;
- $("weekTable").innerHTML=recapHTML("week",t);$("homeTests").innerHTML=homeTestsHTML();
- $("homeMeetings").innerHTML=state.meetings.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).map(m=>`<div class="upitem"><span class="bullet"></span><b>${fmtShort(m.date)}</b><span><b>${esc(m.title)}</b><br><span class="tiny">${esc(m.notes||"")}</span></span></div>`).join("")||`<div class="tiny">No meeting notes yet.</div>`;
- let cm=currentMonth();$("monthSummary").innerHTML=cm?`<div style="background:#fff0f5;border-radius:9px;padding:10px;margin-bottom:9px"><b>🗓 ${esc(cm.name)} Class Month</b><div class="tiny" style="margin-top:5px">${fmtShort(cm.start)} → ${fmtShort(cm.end)}</div></div><b class="tiny">Class Status for ${esc(cm.name)}</b><div style="margin-top:7px">${state.classes.map(c=>`<div class="between" style="margin:5px 0"><b>${esc(c.name)}</b><span class="pill ${statusClass(c.monthStatus?.[cm.id]||'Normal Classes')}">${esc(c.monthStatus?.[cm.id]||'Normal Classes')}</span></div>`).join('')}</div>`:`<div class="tiny">Set your first class month in Settings.</div>`;
- let hs=Object.values(holidayCache).flat().filter(h=>h.date&&h.date.startsWith('2026')).slice(0,9);$("homeHolidays").innerHTML=hs.length?hs.map(h=>`<div class="holiday-row"><b>${fmtShort(h.date)}</b><span>🇰🇷 ${esc(h.name||'Public Holiday')}</span></div>`).join(''):`<div class="tiny">Korean public holidays load automatically when online.</div>`;
- let hab=$("homeAddMeeting");if(hab)hab.onclick=()=>$("addMeetingBtn").click();
+const el=id=>document.getElementById(id);
+const classList=el("classList");
+
+function renderAll(){
+  ensureState();
+  renderSidebar();
+  renderClass();
+  renderToday();
+  renderGlobalRecap();
+  renderTests(); renderCalendar(); renderMeetings(); renderSettings();
 }
-function countRetests(){let n=0;Object.values(state.tests||{}).forEach(byMonth=>Object.values(byMonth||{}).forEach(rows=>Object.values(rows||{}).forEach(r=>{if(r.retest)n++})));return n}
-function futureEvents(){let t=today();let custom=state.events.filter(e=>e.date>=t);let holidays=Object.values(holidayCache).flat().filter(e=>e.date>=t).map(h=>({date:h.date,title:h.localName||h.name,type:"Holiday"}));return custom.concat(holidays).sort((a,b)=>a.date.localeCompare(b.date))}
-function fmtShort(d){return new Date(d+"T12:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"})}
-
-function renderClasses(){$("classCards").innerHTML=state.classes.map(c=>`<div class="classcard"><div class="between"><h3>${esc(c.name)}</h3><button class="btn" onclick="editClass('${c.id}')">Edit</button></div><div class="tiny">${esc(scheduleDays(c).join(", ")||"No schedule")} · ${esc((c.schedule[0]&&c.schedule[0].time)||c.time||"No time")}</div><p><b>${c.students.length}</b> students</p><div>${c.students.slice(0,8).map(s=>`<span class="pill">${esc(s.name)}</span> `).join("")}</div></div>`).join("")||`<div class="card">No classes yet. Add your first class ♡</div>`}
-window.editClass=id=>{let c=classById(id);editingClassId=id;$("classModalTitle").textContent="Edit "+c.name;$("classNameInput").value=c.name;$("classTimeInput").value=(c.schedule[0]&&c.schedule[0].time)||c.time||"";$("classSubjectsInput").value=(c.subjects||[]).map(x=>typeof x==="string"?x:`${x.subject||""}${x.book?" — "+x.book:""}`).join("\n");$("classStudentsInput").value=c.students.map(s=>s.name).join("\n");renderDayChecks(scheduleDays(c));openModal("classModal")};
-$("addClassBtn").onclick=()=>{editingClassId=null;$("classModalTitle").textContent="Add Class";["classNameInput","classTimeInput","classSubjectsInput","classStudentsInput"].forEach(x=>$(x).value="");renderDayChecks([]);openModal("classModal")};
-function renderDayChecks(selected){$("dayChecks").innerHTML=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map(d=>`<label class="pill"><input type="checkbox" value="${d}" ${selected.some(x=>x===d||x.slice(0,3)===d.slice(0,3))?"checked":""}> ${d.slice(0,3)}</label>`).join("")}
-$("saveClassBtn").onclick=()=>{let name=$("classNameInput").value.trim();if(!name)return;let c=editingClassId?classById(editingClassId):{id:uid(),students:[],subjects:[],schedule:[],attendance:{},work:{},classNotes:{},monthStatus:{}};c.name=name;let time=$("classTimeInput").value.trim();let days=[...$("dayChecks").querySelectorAll("input:checked")].map(x=>x.value);c.schedule=days.map(day=>({day,time}));c.subjects=$("classSubjectsInput").value.split("\n").map(x=>x.trim()).filter(Boolean).map(line=>{let [subject,...rest]=line.split("—");return{subject:subject.trim(),book:rest.join("—").trim()}});let old=Object.fromEntries(c.students.map(s=>[s.name,s]));c.students=$("classStudentsInput").value.split("\n").map(x=>x.trim()).filter(Boolean).map(name=>old[name]||{name,tasks:["Recording","Worksheet","Workbook","Extra Homework"]});if(!editingClassId)state.classes.push(c);saveLocal();closeModal("classModal");renderAll()};
-
-function renderAttendance(){let c=classById($("attendanceClass").value)||state.classes[0],d=$("attendanceDate").value||today();if(!$("attendanceDate").value)$("attendanceDate").value=d;if(!c){$("attendanceTable").innerHTML="";return}let rec=c.attendance[d]||{};$("attendanceTable").innerHTML=`<tr><th>Student</th><th>Present</th><th>Note</th></tr>`+c.students.map((s,i)=>`<tr><td>${esc(s.name)}</td><td><input class="attcheck" data-name="${esc(s.name)}" type="checkbox" ${rec[s.name]!==false?"checked":""}></td><td><input class="field attnote" data-name="${esc(s.name)}" value="${esc(rec._notes?.[s.name]||"")}"></td></tr>`).join("");$("saveAttendanceBtn").classList.toggle("saved",!!rec._saved)}
-$("attendanceClass").onchange=renderAttendance;$("attendanceDate").onchange=renderAttendance;$("saveAttendanceBtn").onclick=()=>{let c=classById($("attendanceClass").value),d=$("attendanceDate").value;if(!c)return;let rec={_saved:true,_notes:{}};document.querySelectorAll(".attcheck").forEach(x=>rec[x.dataset.name]=x.checked);document.querySelectorAll(".attnote").forEach(x=>{if(x.value.trim())rec._notes[x.dataset.name]=x.value.trim()});c.attendance[d]=rec;saveLocal();renderAll()};
-
-function renderWork(){let c=classById($("workClass").value)||state.classes[0],d=$("workDate").value||today();if(!$("workDate").value)$("workDate").value=d;if(!c){$("workArea").innerHTML="";return}let rec=c.work[d]||{};let tasks=[...new Set(c.students.flatMap(s=>s.tasks||[]))];$("workArea").innerHTML=`<div class="tablewrap"><table><tr><th>Student</th>${tasks.map(t=>`<th>${esc(t)}</th>`).join("")}<th>DT</th><th>Teacher Note</th></tr>${c.students.map(s=>`<tr><td><b>${esc(s.name)}</b></td>${tasks.map(t=>`<td>${(s.tasks||[]).includes(t)?`<input class="workcheck" data-student="${esc(s.name)}" data-task="${esc(t)}" type="checkbox" ${rec[s.name]?.[t]?"checked":""}>`:"—"}</td>`).join("")}<td><input class="field dtinput" data-student="${esc(s.name)}" type="number" min="0" value="${rec[s.name]?.dt||0}" style="width:65px"></td><td><input class="field worknote" data-student="${esc(s.name)}" value="${esc(rec[s.name]?.note||"")}"></td></tr>`).join("")}</table></div>`;$("saveWorkBtn").classList.toggle("saved",!!rec._saved)}
-$("workClass").onchange=renderWork;$("workDate").onchange=renderWork;$("saveWorkBtn").onclick=()=>{let c=classById($("workClass").value),d=$("workDate").value;if(!c)return;let rec={_saved:true};c.students.forEach(s=>rec[s.name]={dt:0,note:""});document.querySelectorAll(".workcheck").forEach(x=>rec[x.dataset.student][x.dataset.task]=x.checked);document.querySelectorAll(".dtinput").forEach(x=>rec[x.dataset.student].dt=Number(x.value)||0);document.querySelectorAll(".worknote").forEach(x=>rec[x.dataset.student].note=x.value.trim());c.work[d]=rec;saveLocal();renderAll()};
-
-function testKey(c,m){state.tests[c] ||= {};state.tests[c][m] ||= {};return state.tests[c][m]}
-function renderTests(){let c=classById($("testClass").value)||state.classes[0],m=$("testMonth").value||(currentMonth()?.id||"default");if(!c){$("testTable").innerHTML="";return}let rows=testKey(c.id,m);$("testTable").innerHTML=`<tr><th>Student</th><th>Score</th><th>Retest?</th><th>Retest Score</th><th>Vocab Mistakes</th><th>Grammar & Writing</th><th>Content Understanding</th><th>Notes</th></tr>`+c.students.map(s=>{let r=rows[s.name]||{};return`<tr data-student="${esc(s.name)}"><td><b>${esc(s.name)}</b></td><td><input class="field ts-score" type="number" value="${r.score??""}" style="width:72px"></td><td><input class="ts-retest" type="checkbox" ${r.retest?"checked":""}></td><td><input class="field ts-rscore" type="number" value="${r.retestScore??""}" style="width:72px"></td><td><input class="field ts-vocab" type="number" min="0" value="${r.vocab??""}" style="width:72px"></td><td><input class="field ts-gw" type="number" min="0" value="${r.grammarWriting??""}" style="width:82px"></td><td><input class="field ts-content" type="number" min="0" value="${r.content??""}" style="width:82px"></td><td><input class="field ts-note" value="${esc(r.note||"")}"></td></tr>`}).join("")}
-$("testClass").onchange=renderTests;$("testMonth").onchange=renderTests;$("saveTestsBtn").onclick=()=>{let c=classById($("testClass").value),m=$("testMonth").value;if(!c)return;let rows=testKey(c.id,m);$("testTable").querySelectorAll("tr[data-student]").forEach(tr=>{let val=sel=>{let v=tr.querySelector(sel).value;return v===""?null:Number(v)};rows[tr.dataset.student]={score:val(".ts-score"),retest:tr.querySelector(".ts-retest").checked,retestScore:val(".ts-rscore"),vocab:val(".ts-vocab"),grammarWriting:val(".ts-gw"),content:val(".ts-content"),note:tr.querySelector(".ts-note").value.trim()}});saveLocal();renderAll()};
-function homeTestsHTML(){let c=state.classes[0],m=currentMonth();if(!c||!m)return`<tr><td class="tiny">No current test log yet.</td></tr>`;let rows=state.tests?.[c.id]?.[m.id]||{};return`<tr><th>${esc(c.name)}</th><th>Score</th><th>Retest</th><th>Vocab</th><th>Grammar & Writing</th><th>Content</th></tr>`+c.students.slice(0,6).map(s=>{let r=rows[s.name]||{};return`<tr><td>${esc(s.name)}</td><td>${r.score??"—"}</td><td>${r.retest?(r.retestScore??"Needed"):"—"}</td><td>${r.vocab??"—"}</td><td>${r.grammarWriting??"—"}</td><td>${r.content??"—"}</td></tr>`}).join("")}
-
-function weekBounds(d){let x=new Date(d+"T12:00:00"),day=(x.getDay()+6)%7,a=new Date(x);a.setDate(x.getDate()-day);let b=new Date(a);b.setDate(a.getDate()+6);return[iso(a),iso(b)]}
-function monthBounds(d){let x=new Date(d+"T12:00:00"),m=state.classMonths.find(m=>m.start<=d&&m.end>=d);return m?[m.start,m.end]:[iso(new Date(x.getFullYear(),x.getMonth(),1)),iso(new Date(x.getFullYear(),x.getMonth()+1,0))]}
-function datesBetween(a,b){let out=[],d=new Date(a+"T12:00:00"),end=new Date(b+"T12:00:00");for(;d<=end;d.setDate(d.getDate()+1))out.push(iso(d));return out}
-function recapHTML(mode,d){let [a,b]=mode==="week"?weekBounds(d):monthBounds(d),ds=datesBetween(a,b);return`<tr><th>Class</th><th>Students</th><th>Attendance</th><th>Work Check</th><th>DT</th><th>Test / Retest</th><th>Status</th></tr>`+state.classes.map(c=>{let sched=ds.filter(x=>classScheduled(c,x)),savedA=sched.filter(x=>attendanceSaved(c,x)),present=0,total=0;savedA.forEach(x=>{let r=c.attendance[x];c.students.forEach(s=>{total++;if(r[s.name]!==false)present++})});let work=sched.filter(x=>workSaved(c,x));let dt=ds.reduce((n,x)=>n+Object.values(c.work[x]||{}).filter(v=>v&&typeof v==="object").reduce((z,r)=>z+(Number(r.dt)||0),0),0);let cm=state.classMonths.find(m=>m.start<=d&&m.end>=d),status=cm?(c.monthStatus?.[cm.id]||"Normal Classes"):"Normal Classes";let tests=cm?Object.values(state.tests?.[c.id]?.[cm.id]||{}):[],retests=tests.filter(x=>x.retest).length;return`<tr><td><b>${esc(c.name)}</b></td><td>${c.students.length}</td><td>${total?Math.round(present/total*100)+"%":"—"} <span class="tiny">(${savedA.length}/${sched.length})</span></td><td>${work.length}/${sched.length}</td><td>${dt}</td><td>${tests.length?tests.length+" logged · "+retests+" retest":"—"}</td><td><span class="pill ${statusClass(status)}">${esc(status)}</span></td></tr>`}).join("")}
-function renderRecap(){let d=$("recapDate").value||today();if(!$("recapDate").value)$("recapDate").value=d;let mode=$("recapMode").value,[a,b]=mode==="week"?weekBounds(d):monthBounds(d);$("recapRange").textContent=`${fmtShort(a)} – ${fmtShort(b)}`;$("recapTable").innerHTML=recapHTML(mode,d)}
-$("recapMode").onchange=renderRecap;$("recapDate").onchange=renderRecap;
-function statusClass(s){return s==="Exam Prep"?"exam":s==="No Class"?"off":""}
-
-function monthGrid(container,title,cursor){let y=cursor.getFullYear(),m=cursor.getMonth();$(title).textContent=cursor.toLocaleDateString(undefined,{month:"long",year:"numeric"});let first=new Date(y,m,1),last=new Date(y,m+1,0),cells=[];DAYS.forEach(d=>cells.push(`<div class="dow">${d}</div>`));for(let i=0;i<first.getDay();i++)cells.push(`<div class="day muted"></div>`);for(let n=1;n<=last.getDate();n++){let d=iso(new Date(y,m,n)),events=state.events.filter(e=>e.date===d),hol=(holidayCache[y]||[]).filter(h=>h.date===d),has=events.length||hol.length;cells.push(`<div class="day ${d===today()?"today":""}" title="${esc([...hol.map(h=>h.localName||h.name),...events.map(e=>e.title)].join(" · "))}">${n}${has?`<div class="dot ${hol.length?"holiday":"event"}"></div>`:""}</div>`)}$(container).innerHTML=cells.join("")}
-function renderMini(){monthGrid("miniCalendar","miniMonthTitle",miniCursor)}
-function renderCalendars(){monthGrid("bigCalendar","bigMonthTitle",calendarCursor);let y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),prefix=`${y}-${String(m+1).padStart(2,"0")}`;let items=[...(holidayCache[y]||[]).filter(h=>h.date.startsWith(prefix)).map(h=>({date:h.date,title:h.localName||h.name,type:"Korean Holiday"})),...state.events.filter(e=>e.date.startsWith(prefix))].sort((a,b)=>a.date.localeCompare(b.date));$("calendarList").innerHTML=items.map(e=>`<div class="upitem"><span class="bullet"></span><b>${fmtShort(e.date)}</b><span>${esc(e.title)} <span class="tiny">· ${esc(e.type||"Event")}</span></span></div>`).join("")||`<div class="tiny">No events this month.</div>`}
-$("miniPrev").onclick=()=>{miniCursor=new Date(miniCursor.getFullYear(),miniCursor.getMonth()-1,1);ensureHolidays(miniCursor.getFullYear()).then(renderAll)};$("miniNext").onclick=()=>{miniCursor=new Date(miniCursor.getFullYear(),miniCursor.getMonth()+1,1);ensureHolidays(miniCursor.getFullYear()).then(renderAll)};$("calPrev").onclick=()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()-1,1);ensureHolidays(calendarCursor.getFullYear()).then(renderAll)};$("calNext").onclick=()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,1);ensureHolidays(calendarCursor.getFullYear()).then(renderAll)};
-document.querySelectorAll("[data-open-event]").forEach(b=>b.onclick=()=>{$("eventDate").value=today();$("eventTitle").value="";openModal("eventModal")});$("saveEventBtn").onclick=()=>{if(!$("eventDate").value||!$("eventTitle").value.trim())return;state.events.push({id:uid(),date:$("eventDate").value,type:$("eventType").value,title:$("eventTitle").value.trim()});saveLocal();closeModal("eventModal");renderAll()};
-async function ensureHolidays(year){if(holidayCache[year])return;try{let r=await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/KR`);if(!r.ok)throw 0;holidayCache[year]=await r.json()}catch(e){holidayCache[year]=year===2026?[{date:"2026-01-01",localName:"신정",name:"New Year's Day"},{date:"2026-03-01",localName:"삼일절",name:"Independence Movement Day"},{date:"2026-05-05",localName:"어린이날",name:"Children's Day"},{date:"2026-06-06",localName:"현충일",name:"Memorial Day"},{date:"2026-08-15",localName:"광복절",name:"Liberation Day"},{date:"2026-10-03",localName:"개천절",name:"National Foundation Day"},{date:"2026-10-09",localName:"한글날",name:"Hangul Day"},{date:"2026-12-25",localName:"크리스마스",name:"Christmas"}]:[]}}
-
-function renderMeetings(){$("meetingTable").innerHTML=`<tr><th>Date</th><th>Title</th><th>Notes</th><th></th></tr>`+state.meetings.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(m=>`<tr><td>${esc(m.date)}</td><td><b>${esc(m.title)}</b></td><td style="white-space:normal">${esc(m.notes||"")}</td><td><button class="btn danger" onclick="deleteMeeting('${m.id}')">Delete</button></td></tr>`).join("")}
-$("addMeetingBtn").onclick=()=>{$("meetingDate").value=today();$("meetingTitle").value="";$("meetingNotes").value="";openModal("meetingModal")};$("saveMeetingBtn").onclick=()=>{if(!$("meetingDate").value||!$("meetingTitle").value.trim())return;state.meetings.push({id:uid(),date:$("meetingDate").value,title:$("meetingTitle").value.trim(),notes:$("meetingNotes").value.trim()});saveLocal();closeModal("meetingModal");renderAll()};window.deleteMeeting=id=>{state.meetings=state.meetings.filter(x=>x.id!==id);saveLocal();renderAll()};
-
-function renderSettings(){let m=currentMonth();$("monthName").value=m?.name||"";$("monthStart").value=m?.start||"";$("monthEnd").value=m?.end||"";$("classStatuses").innerHTML=m?`<h3>Class Status for ${esc(m.name)}</h3>`+state.classes.map(c=>`<div class="between" style="margin:8px 0"><b>${esc(c.name)}</b><select class="field statusSelect" data-class="${c.id}" style="width:auto"><option ${(!c.monthStatus?.[m.id]||c.monthStatus[m.id]==="Normal Classes")?"selected":""}>Normal Classes</option><option ${c.monthStatus?.[m.id]==="Exam Prep"?"selected":""}>Exam Prep</option><option ${c.monthStatus?.[m.id]==="No Class"?"selected":""}>No Class</option></select></div>`).join(""):`<div class="tiny">Create a class month above.</div>`}
-$("saveMonthBtn").onclick=()=>{let name=$("monthName").value.trim(),start=$("monthStart").value,end=$("monthEnd").value;if(!name||!start||!end)return;let m=currentMonth();if(m&&m.name===name){m.start=start;m.end=end}else{m={id:uid(),name,start,end};state.classMonths.push(m)}document.querySelectorAll(".statusSelect").forEach(x=>{let c=classById(x.dataset.class);c.monthStatus ||= {};c.monthStatus[m.id]=x.value});saveLocal();renderAll()};
-
-$("attendanceDate").value=$("workDate").value=$("recapDate").value=today();
-$("settingsConnectionBtn").onclick=$("changeConnectionBtn").onclick=()=>{localStorage.removeItem(CFG_URL);localStorage.removeItem(CFG_KEY);location.reload()};
-
-function config(){return{url:localStorage.getItem(CFG_URL)||"",key:localStorage.getItem(CFG_KEY)||""}}
-function initSB(){let c=config();if(!c.url||!c.key||!window.supabase)return false;try{sb=window.supabase.createClient(c.url,c.key);return true}catch(e){return false}}
-function showAuth(){let c=config();$("loginScreen").classList.add("show");$("connectionSetup").style.display=c.url&&c.key?"none":"block";$("loginForm").style.display=c.url&&c.key?"block":"none"}
-$("saveConnectionBtn").onclick=()=>{let u=$("setupUrl").value.trim(),k=$("setupKey").value.trim();if(!u||!k)return;localStorage.setItem(CFG_URL,u);localStorage.setItem(CFG_KEY,k);location.reload()};
-$("loginBtn").onclick=async()=>{if(!sb&&!initSB())return;let{data,error}=await sb.auth.signInWithPassword({email:$("loginEmail").value.trim(),password:$("loginPassword").value});if(error){$("loginError").textContent=error.message;return}currentUser=data.user;$("loginScreen").classList.remove("show");$("syncStatus").textContent="Signed in · press Load Latest"};
-$("forgotBtn").onclick=async()=>{let email=$("loginEmail").value.trim();if(!email){$("loginError").textContent="Enter your email first.";return}if(!sb&&!initSB())return;let redirectTo=location.origin+location.pathname;let{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});$("loginError").textContent=error?error.message:"Recovery email sent ♡"};
-$("setPasswordBtn").onclick=async()=>{let a=$("newPassword").value,b=$("confirmPassword").value;if(a.length<6){$("recoveryError").textContent="Use at least 6 characters.";return}if(a!==b){$("recoveryError").textContent="Passwords do not match.";return}let{error}=await sb.auth.updateUser({password:a});if(error){$("recoveryError").textContent=error.message;return}$("recoveryError").textContent="Password changed ♡";setTimeout(()=>{$("recoveryBox").style.display="none";$("loginScreen").classList.remove("show")},700)};
-$("logoutBtn").onclick=async()=>{if(sb)await sb.auth.signOut();currentUser=null;showAuth()};
-$("saveTodayBtn").onclick=async()=>{if(!currentUser){showAuth();return}$("syncStatus").textContent="Saving…";let payload=JSON.parse(JSON.stringify(state));let{data:rows,error:q}=await sb.from("makis_data").select("id").eq("user_id",currentUser.id).limit(1);if(q){$("syncStatus").textContent="Save failed: "+q.message;return}let error;if(rows?.length)({error}=await sb.from("makis_data").update({data:payload,updated_at:new Date().toISOString()}).eq("id",rows[0].id));else({error}=await sb.from("makis_data").insert({user_id:currentUser.id,data:payload,updated_at:new Date().toISOString()}));$("syncStatus").textContent=error?"Save failed: "+error.message:"✓ Saved "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})};
-$("loadLatestBtn").onclick=async()=>{if(!currentUser){showAuth();return}$("syncStatus").textContent="Loading…";let{data,error}=await sb.from("makis_data").select("data,updated_at").eq("user_id",currentUser.id).order("updated_at",{ascending:false}).limit(1);if(error){$("syncStatus").textContent="Load failed: "+error.message;return}if(!data?.length){$("syncStatus").textContent="No cloud save yet.";return}state=data[0].data||blank();migrate(state);saveLocal();$("syncStatus").textContent="✓ Loaded "+new Date(data[0].updated_at).toLocaleString();renderAll()};
-
-async function boot(){
- showAuth();if(initSB()){
-   sb.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){currentUser=session?.user||null;$("connectionSetup").style.display="none";$("loginForm").style.display="none";$("recoveryBox").style.display="block";$("loginScreen").classList.add("show")}});
-   let{data}=await sb.auth.getSession();currentUser=data?.session?.user||null;
-   let hash=location.hash||"";if(hash.includes("type=recovery")){$("connectionSetup").style.display="none";$("loginForm").style.display="none";$("recoveryBox").style.display="block";$("loginScreen").classList.add("show")}
-   else if(currentUser){$("loginScreen").classList.remove("show");$("syncStatus").textContent="Signed in · press Load Latest"}
- }
- await ensureHolidays(new Date().getFullYear());await ensureHolidays(new Date().getFullYear()+1);renderAll()
+function renderSidebar(){
+  classList.innerHTML="";
+  state.classes.forEach(c=>{
+    ensureClass(c);
+    const b=document.createElement("button");
+    b.className="classbtn"+(c.id===state.selectedClassId?" active":"");
+    b.innerHTML=`<span>${escapeHTML(c.name)}</span><span class="badge">${c.students.length}</span>`;
+    b.addEventListener("click",()=>{state.selectedClassId=c.id;save();switchGlobal("classes");renderAll()});
+    classList.appendChild(b);
+  });
+  el("classCount").textContent=`${state.classes.length} ${state.classes.length===1?"class":"classes"}`;
 }
-boot();
+function renderClass(){
+  const c=cls();
+  if(!c){
+    el("emptyState").style.display="grid";
+    el("classWorkspace").style.display="none";
+    return;
+  }
+  ensureClass(c);
+  el("emptyState").style.display="none";
+  el("classWorkspace").style.display="block";
+  el("selectedClassName").textContent=c.name;
+  el("subjectChips").innerHTML=c.subjects.length?c.subjects.map(s=>`<span class="chip">${escapeHTML(s.subject)} · ${escapeHTML(s.book||"No book")}</span>`).join(""):`<span class="tiny">No subjects added yet</span>`;
+  renderAttendance();
+  renderWork();
+  renderManagers();
+  renderClassRecap();
+}
+
+const attendanceDrafts={};
+const workDrafts={};
+function draftKey(c,date){return c.id+"|"+date}
+function attendanceDraft(c,date){
+  const k=draftKey(c,date);
+  if(!attendanceDrafts[k]){
+    const saved=c.attendance[date]||{}, notes=c.attendanceNotes?.[date]||{};
+    attendanceDrafts[k]={};
+    c.students.forEach(st=>attendanceDrafts[k][st.name]={present:Object.prototype.hasOwnProperty.call(saved,st.name)?!!saved[st.name]:true,note:notes[st.name]||""});
+  }
+  return attendanceDrafts[k];
+}
+function renderAttendance(){
+  const c=cls();if(!c)return;ensureClass(c);
+  const date=el("attendanceDate").value||todayISO();el("attendanceDate").value=date;
+  const draft=attendanceDraft(c,date), wrap=el("attendanceList");wrap.innerHTML="";
+  c.students.forEach(st=>{
+    const rec=draft[st.name]||{present:true,note:""};
+    const r=document.createElement("div");r.className="student-row";r.style.alignItems="flex-start";
+    r.innerHTML=`<div style="flex:1"><div class="between"><span class="student-name">${escapeHTML(st.name)}</span><label style="margin:0;display:flex;align-items:center;gap:8px"><input data-present type="checkbox" style="width:auto" ${rec.present?"checked":""}> Present</label></div><input data-att-note placeholder="Optional note for ${escapeHTML(st.name)}" value="${escapeHTML(rec.note||"")}" style="margin-top:8px"></div>`;
+    r.querySelector("[data-present]").addEventListener("change",e=>rec.present=e.target.checked);
+    r.querySelector("[data-att-note]").addEventListener("input",e=>rec.note=e.target.value);
+    wrap.appendChild(r);
+  });
+  el("attendanceSaveStatus").textContent=c.attendanceSaved[date]?"✓ Attendance saved for this date":"Not recorded yet";
+}
+function saveAttendance(){
+  const c=cls();if(!c)return;ensureClass(c);const date=el("attendanceDate").value||todayISO(),draft=attendanceDraft(c,date);
+  c.attendance[date]={};c.attendanceNotes[date]={};
+  c.students.forEach(st=>{const r=draft[st.name]||{present:true,note:""};c.attendance[date][st.name]=!!r.present;if((r.note||"").trim())c.attendanceNotes[date][st.name]=r.note.trim()});
+  c.attendanceSaved[date]=true;save();renderAttendance();renderToday();renderGlobalRecap();
+  el("syncStatus").textContent="Attendance saved locally · use Save Today for cloud";
+}
+function workDraft(c,date){
+  const k=draftKey(c,date);
+  if(!workDrafts[k]){workDrafts[k]=JSON.parse(JSON.stringify(c.work[date]||{}));c.students.forEach(st=>{workDrafts[k][st.name]||={tasks:{},note:"",dt:0};workDrafts[k][st.name].tasks||={}})}
+  return workDrafts[k];
+}
+function renderWork(){
+  const c=cls();if(!c)return;ensureClass(c);const date=el("workDate").value||todayISO();el("workDate").value=date;
+  const draft=workDraft(c,date),wrap=el("workTable");wrap.innerHTML="";
+  if(!c.students.length){wrap.innerHTML='<div class="tiny">Add students first.</div>';return}
+  const allTasks=[...new Set(c.students.flatMap(st=>st.tasks||[]))];
+  const controls=document.createElement("div");controls.className="inner";controls.style.marginBottom="12px";
+  controls.innerHTML=`<strong>Quick Check All</strong><div class="tiny">These changes are drafts until you press Save Work Check.</div><div class="row" style="margin-top:10px;flex-wrap:wrap">${allTasks.map((t,i)=>`<button class="btn mint" data-check-task="${i}">✓ All ${escapeHTML(t)}</button>`).join("")}<button class="btn blue" data-check-everything>✓ Check Everything</button></div>`;
+  wrap.appendChild(controls);
+  controls.querySelectorAll("[data-check-task]").forEach(btn=>btn.onclick=()=>{const t=allTasks[+btn.dataset.checkTask];c.students.forEach(st=>{if((st.tasks||[]).includes(t))draft[st.name].tasks[t]=true});renderWork()});
+  controls.querySelector("[data-check-everything]").onclick=()=>{c.students.forEach(st=>(st.tasks||[]).forEach(t=>draft[st.name].tasks[t]=true));renderWork()};
+  c.students.forEach(st=>{
+    const rec=draft[st.name]||{tasks:{},note:"",dt:0},tasks=st.tasks||[];
+    const box=document.createElement("div");box.className="inner";box.style.marginBottom="11px";
+    box.innerHTML=`<div class="between"><strong>${escapeHTML(st.name)}</strong><span class="tiny">${tasks.length} checks</span></div><div class="task-list" style="margin-top:9px">${tasks.map((t,i)=>`<label class="student-row" style="margin:0"><span>${escapeHTML(t)}</span><input data-task="${i}" type="checkbox" style="width:auto" ${rec.tasks?.[t]?"checked":""}></label>`).join("")}</div><div class="between" style="margin-top:10px"><label style="margin:0">Teacher's Note</label><div class="row"><span class="dt-pill">DT: ${Number(rec.dt||0)}</span><button class="btn danger" data-dt-plus>+ DT</button><button class="btn" data-dt-minus>−</button></div></div><textarea data-note placeholder="What happened today? DT reason? Anything to remember?">${escapeHTML(rec.note||"")}</textarea>`;
+    box.querySelectorAll("[data-task]").forEach(inp=>inp.onchange=e=>{const t=tasks[+e.target.dataset.task];rec.tasks[t]=e.target.checked});
+    box.querySelector("[data-note]").oninput=e=>rec.note=e.target.value;
+    box.querySelector("[data-dt-plus]").onclick=()=>{rec.dt=Number(rec.dt||0)+1;renderWork()};
+    box.querySelector("[data-dt-minus]").onclick=()=>{rec.dt=Math.max(0,Number(rec.dt||0)-1);renderWork()};
+    wrap.appendChild(box);
+  });
+  el("workSaveStatus").textContent=c.workSaved[date]?"✓ Work Check saved for this date":"Not recorded yet";
+}
+function saveWork(){
+  const c=cls();if(!c)return;ensureClass(c);const date=el("workDate").value||todayISO(),draft=workDraft(c,date);
+  c.work[date]=JSON.parse(JSON.stringify(draft));c.workSaved[date]=true;save();renderWork();renderToday();renderGlobalRecap();
+  el("syncStatus").textContent="Work Check saved locally · use Save Today for cloud";
+}
+function renderManagers(){
+  const c=cls();if(!c)return;
+  const sm=el("manageStudentList");sm.innerHTML="";
+  c.students.forEach((s,i)=>{
+    const r=document.createElement("div");r.className="student-row";
+    r.innerHTML=`<div><div class="student-name">${escapeHTML(s.name)}</div><div class="tiny">${(s.tasks||[]).map(escapeHTML).join(" · ")||"No tasks"}</div></div><div class="row"><button class="btn blue">Edit</button><button class="btn danger">Remove</button></div>`;
+    const bs=r.querySelectorAll("button");bs[0].addEventListener("click",()=>openStudent(i));bs[1].addEventListener("click",()=>{if(confirm(`Remove ${s.name}?`)){c.students.splice(i,1);c.excluded=c.excluded.filter(n=>n!==s.name);save();renderAll()}});
+    sm.appendChild(r);
+  });
+  const sub=el("subjectManager");sub.innerHTML="";
+  c.subjects.forEach((s,i)=>{
+    const r=document.createElement("div");r.className="subject-row";r.innerHTML=`<div><strong>${escapeHTML(s.subject)}</strong><div class="tiny">${escapeHTML(s.book||"No book")}</div></div><button class="btn danger">Remove</button>`;
+    r.querySelector("button").addEventListener("click",()=>{c.subjects.splice(i,1);save();renderAll()});sub.appendChild(r);
+  });
+  const sch=el("scheduleManager");sch.innerHTML="";
+  c.schedule.forEach((s,i)=>{
+    const r=document.createElement("div");r.className="schedule-row";r.innerHTML=`<span><strong>${s.day}</strong> · ${s.time||"No time"}</span><button class="btn danger">Remove</button>`;
+    r.querySelector("button").addEventListener("click",()=>{c.schedule.splice(i,1);save();renderAll()});sch.appendChild(r);
+  });
+}
+function rangeFor(period,dateStr){
+  const d=new Date(dateStr+"T12:00:00"),start=new Date(d),end=new Date(d);
+  if(period==="week"){const day=(d.getDay()+6)%7;start.setDate(d.getDate()-day);end.setDate(start.getDate()+6)}
+  if(period==="month"){start.setDate(1);end.setMonth(start.getMonth()+1,0)}
+  if(period==="year"){start.setMonth(0,1);end.setMonth(11,31)}
+  const iso=x=>x.toISOString().slice(0,10);return [iso(start),iso(end)]
+}
+function recapForClass(c,period,ref){
+  ensureClass(c);const [a,b]=rangeFor(period,ref);
+  let totalChecks=0,doneChecks=0,present=0,attendanceTotal=0,totalDT=0,notes=[];
+  const studentStats={};
+  c.students.forEach(s=>studentStats[s.name]={done:0,total:0,present:0,att:0,dt:0});
+  Object.entries(c.work).forEach(([date,students])=>{
+    if(date<a||date>b)return;
+    Object.entries(students).forEach(([name,rec])=>{
+      const st=studentStats[name];if(!st)return;
+      const tasks=c.students.find(s=>s.name===name)?.tasks||[];
+      tasks.forEach(t=>{st.total++;totalChecks++;if(rec.tasks?.[t]){st.done++;doneChecks++}});
+      const dts=Number(rec.dt||0);st.dt+=dts;totalDT+=dts;if(rec.note?.trim())notes.push({date,name,note:rec.note.trim()});
+    });
+  });
+  Object.entries(c.attendance).forEach(([date,students])=>{
+    if(date<a||date>b)return;
+    Object.entries(students).forEach(([name,val])=>{const st=studentStats[name];if(!st)return;st.att++;attendanceTotal++;if(val){st.present++;present++}});
+  });
+  return {a,b,totalChecks,doneChecks,present,attendanceTotal,totalDT,notes,studentStats};
+}
+function renderRecap(target,c,period,ref){
+  const r=recapForClass(c,period,ref),pct=r.totalChecks?Math.round(r.doneChecks/r.totalChecks*100):0,att=r.attendanceTotal?Math.round(r.present/r.attendanceTotal*100):0;
+  target.innerHTML=`<div class="summarycards">
+    <div class="metric"><span class="tiny">Work Completion</span><strong>${pct}%</strong></div>
+    <div class="metric"><span class="tiny">Attendance</span><strong>${att}%</strong></div>
+    <div class="metric"><span class="tiny">Checks Done</span><strong>${r.doneChecks}/${r.totalChecks}</strong></div>
+    <div class="metric"><span class="tiny">DTs</span><strong>${r.totalDT}</strong></div>
+  </div>
+  <div class="inner"><div class="between"><h3>Student Progress</h3><span class="tiny">${r.a} → ${r.b}</span></div>
+  <div class="progress-list" style="margin-top:12px">${Object.entries(r.studentStats).map(([name,s])=>{
+    const p=s.total?Math.round(s.done/s.total*100):0;return `<div class="progress-row"><div class="between"><strong>${escapeHTML(name)}</strong><span>${p}%</span></div><div class="bar"><div style="width:${p}%"></div></div><div class="tiny" style="margin-top:5px">${s.done}/${s.total} work checks · ${s.present}/${s.att} attendance · ${s.dt} DT${s.dt===1?"":"s"}</div></div>`
+  }).join("")||'<div class="tiny">No student data yet.</div>'}</div></div>
+  <div class="inner" style="margin-top:14px"><h3>Teacher Notes</h3><div style="margin-top:10px">${r.notes.length?r.notes.sort((x,y)=>y.date.localeCompare(x.date)).map(n=>`<div class="progress-row"><div class="between"><strong>${escapeHTML(n.name)}</strong><span class="tiny">${n.date}</span></div><div class="note-box">${escapeHTML(n.note)}</div></div>`).join(""):'<div class="tiny">No notes in this period.</div>'}</div></div>`;
+}
+function renderClassRecap(){
+  const c=cls();if(!c)return;
+  el("classRecapDate").value ||= todayISO();
+  renderRecap(el("classRecapContent"),c,el("classRecapPeriod").value,el("classRecapDate").value);
+}
+function renderToday(){
+  const date=todayISO(),day=dateDayName(date);el("todayDateLabel").textContent=`${day} · ${date}`;
+  const matches=state.classes.filter(c=>(c.schedule||[]).some(x=>x.day===day)).sort((a,b)=>(a.schedule.find(x=>x.day===day)?.time||"").localeCompare(b.schedule.find(x=>x.day===day)?.time||""));
+  el("todayClassesList").innerHTML=matches.length?matches.map(c=>{ensureClass(c);const times=c.schedule.filter(x=>x.day===day).map(x=>x.time).filter(Boolean).join(", ");const a=!!c.attendanceSaved[date],w=!!c.workSaved[date],status=state.classMonth?.statuses?.[c.id]||"Normal Classes";return `<div class="inner" style="margin-bottom:11px"><div class="between"><div><h3>${escapeHTML(c.name)}</h3><div class="tiny">${times||"Time not set"} · ${c.students.length} students · ${escapeHTML(status)}</div><div class="row" style="margin-top:8px"><span class="badge">${a?"✓ Attendance":"Attendance not saved"}</span><span class="badge">${w?"✓ Work":"Work not saved"}</span></div></div><button class="btn pink" data-open-class="${c.id}">Open Class</button></div></div>`}).join(""):'<div class="empty"><div><h3>No classes scheduled today</h3></div></div>';
+  el("todayClassesList").querySelectorAll("[data-open-class]").forEach(b=>b.onclick=()=>{state.selectedClassId=b.dataset.openClass;save();switchGlobal("classes");renderAll()});
+}
+function renderGlobalRecap(){
+  el("globalRecapDate").value ||= todayISO();const period=el("globalRecapPeriod").value,ref=el("globalRecapDate").value,wrap=el("globalRecapContent");
+  if(!state.classes.length){wrap.innerHTML='<div class="tiny">No classes yet.</div>';return}
+  const month=ref.slice(0,7);
+  wrap.innerHTML=`<div class="tablewrap"><table class="simpletable"><tr><th>Class</th><th>Students</th><th>Attendance</th><th>Work Check</th><th>DT</th><th>Test / Retest</th><th>Status</th></tr>${state.classes.map(c=>{const r=recapForClass(c,period,ref),p=r.totalChecks?Math.round(r.doneChecks/r.totalChecks*100):0,a=r.attendanceTotal?Math.round(r.present/r.attendanceTotal*100):0,test=state.tests[month+"|"+c.id]||{},vals=Object.values(test),tested=vals.filter(x=>x.score!==""&&x.score!=null).length,retests=vals.filter(x=>x.retest).length,status=state.classMonth?.statuses?.[c.id]||"Normal Classes";return `<tr><td><b>${escapeHTML(c.name)}</b></td><td>${c.students.length}</td><td>${a}%</td><td>${p}%</td><td>${r.totalDT}</td><td>${tested} tested${retests?` · ${retests} retest`:""}</td><td>${escapeHTML(status)}</td></tr>`}).join("")}</table></div>`;
+}
+function switchGlobal(name){
+  document.querySelectorAll("[data-global]").forEach(b=>b.classList.toggle("active",b.dataset.global===name));
+  ["classes","today","tests","globalRecap","calendar","meetings","settings"].forEach(n=>el(n+"View")?.classList.toggle("show",n===name));
+  if(name==="tests")renderTests();if(name==="calendar")renderCalendar();if(name==="meetings")renderMeetings();if(name==="settings")renderSettings();if(name==="globalRecap")renderGlobalRecap();
+}
+function switchTab(name){
+  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  document.querySelectorAll(".tabpage").forEach(p=>p.style.display=p.id==="tab-"+name?"block":"none");
+  if(name==="recap")renderClassRecap();
+}
+function openModal(id){
+  el(id).classList.add("open");
+}
+function closeModal(id){
+  el(id).classList.remove("open");
+}
+
+function openClass(mode){
+  classModalMode=mode;const c=cls();el("classModalTitle").textContent=mode==="edit"?"Edit Class":"New Class";el("classNameInput").value=mode==="edit"&&c?c.name:"";openModal("classModal");
+}
+function openStudent(i=null){
+  editingStudentIndex=i;const c=cls(),s=i!==null?c.students[i]:null;
+  el("studentModalTitle").textContent=s?`Edit ${s.name}`:"Add Student";el("studentNameInput").value=s?.name||"";
+  el("studentTaskFields").innerHTML="";(s?.tasks||["Recording","Worksheet","Workbook","Extra Homework"]).forEach(addTaskField);openModal("studentModal");
+}
+function addTaskField(value=""){
+  const r=document.createElement("div");r.className="task-row";r.innerHTML=`<input value="${escapeHTML(value)}" placeholder="Work item"><button class="btn danger">×</button>`;
+  r.querySelector("button").addEventListener("click",()=>r.remove());el("studentTaskFields").appendChild(r);
+}
+document.querySelectorAll("[data-global]").forEach(b=>b.addEventListener("click",()=>switchGlobal(b.dataset.global)));
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
+el("newClassBtn").addEventListener("click",()=>openClass("new"));el("emptyNewClass").addEventListener("click",()=>openClass("new"));el("editClassBtn").addEventListener("click",()=>openClass("edit"));
+el("saveClassBtn").addEventListener("click",()=>{
+  const name=el("classNameInput").value.trim();if(!name)return;
+  if(classModalMode==="edit"){cls().name=name}else{const c={id:uid(),name,students:[],subjects:[],schedule:[],excluded:[],attendance:{},work:{},classNotes:{}};state.classes.push(c);state.selectedClassId=c.id}
+  save();closeModal("classModal");renderAll();
+});
+el("deleteClassBtn").addEventListener("click",()=>{const c=cls();if(c&&confirm(`Delete ${c.name}?`)){state.classes=state.classes.filter(x=>x.id!==c.id);state.selectedClassId=state.classes[0]?.id||null;save();renderAll()}});
+el("addStudentBtn").addEventListener("click",()=>openStudent());
+el("quickAddStudentBtn").addEventListener("click",()=>{
+  const c=cls(), name=el("quickStudentInput").value.trim();
+  if(!c||!name)return;
+  c.students.push({name,tasks:["Recording","Worksheet","Workbook","Extra Homework"]});
+  el("quickStudentInput").value="";
+  save();renderAll();
+});
+el("quickStudentInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter") el("quickAddStudentBtn").click();
+});
+el("addTaskFieldBtn").addEventListener("click",()=>addTaskField(""));
+el("saveStudentBtn").addEventListener("click",()=>{
+  const c=cls(),name=el("studentNameInput").value.trim();if(!c||!name)return;
+  const tasks=[...el("studentTaskFields").querySelectorAll("input")].map(i=>i.value.trim()).filter(Boolean);
+  if(editingStudentIndex!==null){const old=c.students[editingStudentIndex].name;c.students[editingStudentIndex]={name,tasks};if(old!==name)c.excluded=c.excluded.map(n=>n===old?name:n)}
+  else c.students.push({name,tasks});
+  save();closeModal("studentModal");renderAll();
+});
+el("addSubjectBtn").addEventListener("click",()=>{el("subjectNameInput").value="";el("bookNameInput").value="";openModal("subjectModal")});
+el("saveSubjectBtn").addEventListener("click",()=>{const c=cls(),subject=el("subjectNameInput").value.trim(),book=el("bookNameInput").value.trim();if(c&&subject){c.subjects.push({subject,book});save();closeModal("subjectModal");renderAll()}});
+el("addScheduleBtn").addEventListener("click",()=>openModal("scheduleModal"));
+el("saveScheduleBtn").addEventListener("click",()=>{const c=cls();if(c){c.schedule.push({day:el("scheduleDayInput").value,time:el("scheduleTimeInput").value});save();closeModal("scheduleModal");renderAll()}});
+el("attendanceDate").addEventListener("change",renderAttendance);
+el("workDate").addEventListener("change",renderWork);
+el("markAllPresent").addEventListener("click",()=>{const c=cls();if(!c)return;const d=el("attendanceDate").value||todayISO(),draft=attendanceDraft(c,d);c.students.forEach(st=>{draft[st.name]||={present:true,note:""};draft[st.name].present=true});renderAttendance()});
+el("classRecapPeriod").addEventListener("change",renderClassRecap);el("classRecapDate").addEventListener("change",renderClassRecap);
+el("globalRecapPeriod").addEventListener("change",renderGlobalRecap);el("globalRecapDate").addEventListener("change",renderGlobalRecap);
+
+
+["classModal","studentModal","subjectModal","scheduleModal"].forEach(id=>{
+  const modal=el(id);
+  modal.addEventListener("click",e=>{
+    if(e.target===modal) closeModal(id);
+  });
+});
+
+
+
+const KOREAN_HOLIDAYS_2026=[
+ {date:"2026-01-01",name:"새해"},{date:"2026-02-16",name:"설날 연휴"},{date:"2026-02-17",name:"설날"},{date:"2026-02-18",name:"설날 연휴"},{date:"2026-03-01",name:"삼일절"},{date:"2026-03-02",name:"삼일절 대체공휴일"},{date:"2026-05-05",name:"어린이날"},{date:"2026-05-24",name:"부처님오신날"},{date:"2026-05-25",name:"대체공휴일"},{date:"2026-06-06",name:"현충일"},{date:"2026-08-15",name:"광복절"},{date:"2026-08-17",name:"광복절 대체공휴일"},{date:"2026-09-24",name:"추석 연휴"},{date:"2026-09-25",name:"추석"},{date:"2026-09-26",name:"추석 연휴"},{date:"2026-10-03",name:"개천절"},{date:"2026-10-05",name:"개천절 대체공휴일"},{date:"2026-10-09",name:"한글날"},{date:"2026-12-25",name:"크리스마스"}
+];
+function testKey(){return (el("testMonthInput")?.value||todayISO().slice(0,7))+"|"+(el("testClassSelect")?.value||"")}
+function renderTests(){ensureState(); const sel=el("testClassSelect"); if(!sel)return; const prev=sel.value; sel.innerHTML=state.classes.map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`).join(""); if(prev&&state.classes.some(c=>c.id===prev))sel.value=prev; if(!el("testMonthInput").value)el("testMonthInput").value=todayISO().slice(0,7); const c=state.classes.find(x=>x.id===sel.value)||state.classes[0]; if(c&&sel.value!==c.id)sel.value=c.id; const recs=state.tests[testKey()]||{}; el("testsTable").innerHTML=`<tr><th>Student</th><th>Score</th><th>Retest?</th><th>Retest Score</th><th>Vocab</th><th>Grammar & Writing</th><th>Content</th><th>Notes</th></tr>`+(c?.students||[]).map(st=>{const r=recs[st.name]||{};return `<tr data-test-student="${escapeHTML(st.name)}"><td><b>${escapeHTML(st.name)}</b></td><td><input data-f="score" type="number" value="${r.score??""}" style="width:70px"></td><td><input data-f="retest" type="checkbox" ${r.retest?"checked":""}></td><td><input data-f="retestScore" type="number" value="${r.retestScore??""}" style="width:70px"></td><td><input data-f="vocab" type="number" value="${r.vocab??""}" style="width:65px"></td><td><input data-f="grammar" type="number" value="${r.grammar??""}" style="width:80px"></td><td><input data-f="content" type="number" value="${r.content??""}" style="width:65px"></td><td><input data-f="notes" value="${escapeHTML(r.notes||"")}"></td></tr>`}).join("")||`<tr><td colspan="8" class="tiny">Add students to a class first.</td></tr>`}
+function saveTests(){ensureState(); const key=testKey(); state.tests[key]={}; document.querySelectorAll("#testsTable tr[data-test-student]").forEach(tr=>{const r={};tr.querySelectorAll("[data-f]").forEach(i=>r[i.dataset.f]=i.type==="checkbox"?i.checked:i.value);state.tests[key][tr.dataset.testStudent]=r});save();el("syncStatus").textContent="Test log saved locally · use Save Today for cloud"}
+function renderCalendar(){ensureState(); if(!el("calendarEvents"))return; const now=new Date();el("calendarMonthTitle").textContent=now.toLocaleString(undefined,{month:"long",year:"numeric"}); const events=[...state.events].sort((a,b)=>a.date.localeCompare(b.date));el("calendarEvents").innerHTML=events.length?events.map(e=>`<div class="eventrow"><b>${escapeHTML(e.date)}</b><span class="badge">${escapeHTML(e.type)}</span><span>${escapeHTML(e.title)}</span><button class="btn danger" data-del-event="${e.id}">Delete</button></div>`).join(""):`<div class="tiny" style="padding:12px 0">No custom events yet.</div>`;el("holidayList").innerHTML=KOREAN_HOLIDAYS_2026.map(h=>`<div class="eventrow"><b>${h.date.slice(5)}</b><span></span><span>${h.name}</span><span></span></div>`).join("");document.querySelectorAll("[data-del-event]").forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.delEvent);save();renderCalendar()})}
+function renderMeetings(){ensureState();if(!el("meetingsTable"))return;el("meetingsTable").innerHTML=`<tr><th>Date</th><th>Title</th><th>Notes</th><th></th></tr>`+(state.meetings.length?state.meetings.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(m=>`<tr><td>${escapeHTML(m.date)}</td><td><b>${escapeHTML(m.title)}</b></td><td>${escapeHTML(m.notes||"")}</td><td><button class="btn danger" data-del-meeting="${m.id}">Delete</button></td></tr>`).join(""):`<tr><td colspan="4" class="tiny">No meetings logged yet.</td></tr>`);document.querySelectorAll("[data-del-meeting]").forEach(b=>b.onclick=()=>{state.meetings=state.meetings.filter(m=>m.id!==b.dataset.delMeeting);save();renderMeetings()})}
+function renderSettings(){ensureState();if(!el("classMonthName"))return;const m=state.classMonth;el("classMonthName").value=m.name||"";el("classMonthStart").value=m.start||"";el("classMonthEnd").value=m.end||"";el("classMonthStatuses").innerHTML=state.classes.map(c=>`<div class="between" style="margin:7px 0"><b>${escapeHTML(c.name)}</b><select data-month-class="${c.id}" style="width:auto"><option ${m.statuses[c.id]==="Normal Classes"?"selected":""}>Normal Classes</option><option ${m.statuses[c.id]==="Exam Prep Only"?"selected":""}>Exam Prep Only</option><option ${m.statuses[c.id]==="No Class"?"selected":""}>No Class</option></select></div>`).join("")||`<div class="tiny">Create classes first.</div>`}
+
+
+el("saveAttendanceBtn").addEventListener("click",saveAttendance);
+el("saveWorkBtn").addEventListener("click",saveWork);
+el("saveTestsBtn").addEventListener("click",saveTests);
+el("testClassSelect").addEventListener("change",renderTests);
+el("testMonthInput").addEventListener("change",renderTests);
+el("addEventBtn").addEventListener("click",()=>{el("eventDate").value=todayISO();el("eventTitle").value="";openModal("eventModal")});
+el("saveEventBtn").addEventListener("click",()=>{const date=el("eventDate").value,title=el("eventTitle").value.trim();if(!date||!title)return;state.events.push({id:uid(),date,type:el("eventType").value,title});save();closeModal("eventModal");renderCalendar()});
+el("addMeetingBtn").addEventListener("click",()=>{el("meetingDate").value=todayISO();el("meetingTitle").value="";el("meetingNotes").value="";openModal("meetingModal")});
+el("saveMeetingBtn").addEventListener("click",()=>{const date=el("meetingDate").value,title=el("meetingTitle").value.trim();if(!date||!title)return;state.meetings.push({id:uid(),date,title,notes:el("meetingNotes").value.trim()});save();closeModal("meetingModal");renderMeetings()});
+el("saveClassMonthBtn").addEventListener("click",()=>{state.classMonth.name=el("classMonthName").value.trim();state.classMonth.start=el("classMonthStart").value;state.classMonth.end=el("classMonthEnd").value;document.querySelectorAll("[data-month-class]").forEach(x=>state.classMonth.statuses[x.dataset.monthClass]=x.value);save();renderToday();renderGlobalRecap();el("syncStatus").textContent="Class Month saved locally · use Save Today for cloud"});
+el("openConnectionBtn").addEventListener("click",()=>{showLogin();el("changeConnectionBtn").click()});
+
+let sb=null,currentUser=null;const CFG_URL="makis-supabase-url",CFG_KEY="makis-supabase-key";
+function connectionConfig(){return{url:localStorage.getItem(CFG_URL)||"",key:localStorage.getItem(CFG_KEY)||""}}
+function showLogin(){el("loginScreen").classList.add("show");const c=connectionConfig();el("connectionSetup").style.display=c.url&&c.key?"none":"block";el("loginForm").style.display=c.url&&c.key?"block":"none"}
+function hideLogin(){el("loginScreen").classList.remove("show")}
+function initSupabase(){const c=connectionConfig();if(!c.url||!c.key||!window.supabase)return false;try{sb=window.supabase.createClient(c.url,c.key);return true}catch(e){return false}}
+async function checkSession(){showLogin();if(!initSupabase())return;const{data}=await sb.auth.getSession();currentUser=data?.session?.user||null;if(currentUser){hideLogin();el("syncStatus").textContent="Signed in · press Load Latest"}}
+async function login(){el("loginError").textContent="Signing in…";if(!sb&&!initSupabase()){el("loginError").textContent="Connection settings are missing.";return}const{data,error}=await sb.auth.signInWithPassword({email:el("loginEmail").value.trim(),password:el("loginPassword").value});if(error){el("loginError").textContent=error.message;return}currentUser=data.user;el("loginPassword").value="";el("loginError").textContent="";hideLogin();el("syncStatus").textContent="Signed in · press Load Latest"}
+async function forgotPassword(){const email=el("loginEmail").value.trim();if(!email){el("loginError").textContent="Enter your email first.";return}if(!sb&&!initSupabase()){el("loginError").textContent="Connection settings are missing.";return}const redirectTo=location.origin+location.pathname;const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});el("loginError").textContent=error?error.message:"Password reset email sent ♡"}
+async function saveCloud(){if(!currentUser){showLogin();return}el("syncStatus").textContent="Saving…";const payload=JSON.parse(JSON.stringify(state));const{data:rows,error:qerr}=await sb.from("makis_data").select("id").eq("user_id",currentUser.id).limit(1);if(qerr){el("syncStatus").textContent="Save failed: "+qerr.message;return}let error;if(rows&&rows.length){({error}=await sb.from("makis_data").update({data:payload,updated_at:new Date().toISOString()}).eq("id",rows[0].id))}else{({error}=await sb.from("makis_data").insert({user_id:currentUser.id,data:payload,updated_at:new Date().toISOString()}))}if(error){el("syncStatus").textContent="Save failed: "+error.message;return}el("syncStatus").textContent="✓ Saved "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
+async function loadCloud(){if(!currentUser){showLogin();return}el("syncStatus").textContent="Loading…";const{data,error}=await sb.from("makis_data").select("data,updated_at").eq("user_id",currentUser.id).order("updated_at",{ascending:false}).limit(1);if(error){el("syncStatus").textContent="Load failed: "+error.message;return}if(!data||!data.length){el("syncStatus").textContent="No cloud save yet — Save Today will create it.";return}state=data[0].data||blankState();if(!state.selectedClassId&&state.classes?.length)state.selectedClassId=state.classes[0].id;save();renderAll();el("syncStatus").textContent="✓ Loaded "+new Date(data[0].updated_at).toLocaleString()}
+el("saveConnectionBtn").addEventListener("click",()=>{const url=el("setupUrl").value.trim(),key=el("setupKey").value.trim();if(!url||!key)return;localStorage.setItem(CFG_URL,url);localStorage.setItem(CFG_KEY,key);if(initSupabase()){el("connectionSetup").style.display="none";el("loginForm").style.display="block";el("loginSubtitle").textContent="Connected! Now sign in."}});
+el("changeConnectionBtn").addEventListener("click",()=>{const c=connectionConfig();el("setupUrl").value=c.url;el("setupKey").value=c.key;el("connectionSetup").style.display="block";el("loginForm").style.display="none"});
+el("loginBtn").addEventListener("click",login);el("forgotPasswordBtn").addEventListener("click",forgotPassword);el("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});el("saveTodayBtn").addEventListener("click",saveCloud);el("loadLatestBtn").addEventListener("click",loadCloud);el("logoutBtn").addEventListener("click",async()=>{if(sb)await sb.auth.signOut();currentUser=null;showLogin()});
+
+el("attendanceDate").value=todayISO();el("workDate").value=todayISO();el("classRecapDate").value=todayISO();el("globalRecapDate").value=todayISO();
+if(!state.selectedClassId&&state.classes.length)state.selectedClassId=state.classes[0].id;
+renderAll();switchTab("attendance");
+checkSession();
 </script>
-</body></html>
+</body>
+</html>
+<style id="background-only-refinement">
+/* Background/decorations only. Layout and app behavior intentionally untouched. */
+body{
+  background-color:#fff8fc;
+  background-image:
+    radial-gradient(circle at 12% 7%,rgba(255,188,218,.20) 0 7%,transparent 19%),
+    radial-gradient(circle at 90% 13%,rgba(199,220,255,.22) 0 8%,transparent 21%),
+    linear-gradient(rgba(244,184,211,.13) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(244,184,211,.13) 1px,transparent 1px),
+    linear-gradient(180deg,#fff9fd 0%,#fff5fa 48%,#fff9fd 100%);
+  background-size:auto,auto,20px 20px,20px 20px,auto;
+}
+/* Replace emoji banner with a seamless CSS-made pastel scrapbook border. */
+body:before{
+  content:"" !important;
+  height:46px;
+  padding:0;
+  background:
+    radial-gradient(ellipse at 7% 75%,#fff 0 13px,transparent 14px),
+    radial-gradient(ellipse at 11% 75%,#fff 0 17px,transparent 18px),
+    radial-gradient(ellipse at 15% 75%,#fff 0 12px,transparent 13px),
+    radial-gradient(circle at 25% 30%,#ffd1e6 0 4px,#fff2f8 5px 7px,transparent 8px),
+    radial-gradient(circle at 36% 50%,#d8d0ff 0 4px,#f4f0ff 5px 7px,transparent 8px),
+    radial-gradient(circle at 65% 28%,#cde9ff 0 4px,#eef8ff 5px 7px,transparent 8px),
+    radial-gradient(circle at 78% 53%,#ffe6a9 0 4px,#fff7dd 5px 7px,transparent 8px),
+    radial-gradient(ellipse at 86% 75%,#fff 0 13px,transparent 14px),
+    radial-gradient(ellipse at 90% 75%,#fff 0 17px,transparent 18px),
+    radial-gradient(ellipse at 94% 75%,#fff 0 12px,transparent 13px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.28) 0 10px,rgba(255,201,225,.18) 10px 20px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.30) 0 10px,rgba(255,201,225,.18) 10px 20px),
+    linear-gradient(90deg,#ffddea,#fff2f8 30%,#edf4ff 70%,#ffe7f1);
+  border-bottom:1px solid rgba(236,176,207,.45);
+  box-shadow:0 3px 12px rgba(188,118,158,.07);
+}
+/* Remove every emoji decoration from the previous phone skin. */
+.shell:before,.shell:after,.brand h1:after,.sidebar .between:after,.empty:before,.feature-card h3:before{content:"" !important;display:none !important}
+/* Soft CSS-only charms: crisp at any resolution, no cropped raster images. */
+.shell{isolation:isolate}
+.shell::before{display:block!important;content:""!important;position:fixed;right:10px;top:72px;width:54px;height:32px;z-index:0;opacity:.52;pointer-events:none;background:
+ radial-gradient(ellipse at 25% 65%,#fff 0 11px,transparent 12px),
+ radial-gradient(ellipse at 50% 45%,#fff 0 15px,transparent 16px),
+ radial-gradient(ellipse at 75% 65%,#fff 0 11px,transparent 12px);filter:drop-shadow(0 3px 5px rgba(182,153,185,.10))}
+.shell::after{display:block!important;content:""!important;position:fixed;left:9px;bottom:10px;width:72px;height:54px;z-index:0;opacity:.48;pointer-events:none;background:
+ radial-gradient(circle at 12px 33px,#ffc6de 0 5px,transparent 6px),
+ radial-gradient(circle at 22px 24px,#ffd8e8 0 5px,transparent 6px),
+ radial-gradient(circle at 32px 33px,#ffc6de 0 5px,transparent 6px),
+ radial-gradient(circle at 22px 42px,#ffd8e8 0 5px,transparent 6px),
+ radial-gradient(circle at 22px 33px,#fff1a8 0 5px,transparent 6px),
+ linear-gradient(72deg,transparent 48%,#a9d7b7 49% 52%,transparent 53%) 23px 37px/26px 22px no-repeat}
+/* Delicate bow drawn with CSS, attached to header without changing its geometry. */
+.header:after{content:""!important;display:block!important;position:absolute;right:15px;top:12px;width:34px;height:22px;pointer-events:none;opacity:.62;background:
+ radial-gradient(ellipse at 28% 48%,#ffc4dd 0 9px,transparent 10px),
+ radial-gradient(ellipse at 72% 48%,#ffc4dd 0 9px,transparent 10px),
+ radial-gradient(circle at 50% 50%,#f49bc1 0 5px,transparent 6px)}
+/* Keep cards clean so the background decoration blends instead of looking pasted on. */
+.panel:after{content:""!important;display:none!important}
+</style>
